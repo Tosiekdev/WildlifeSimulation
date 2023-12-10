@@ -1,2 +1,2 @@
-# WildlifeSimulation
-Wildlife simulation which aims to mimic real-world scenario.
+# Wildlife Simulation
+Wildlife simulation which aims to mimic real-world scenarios.
