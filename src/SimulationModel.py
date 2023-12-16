@@ -1,9 +1,6 @@
 from typing import Any
-
 import mesa
-
-from .Wolf import Wolf
-
+from .agents import *
 
 class SimulationModel(mesa.Model):
     """Application base model"""
@@ -18,22 +15,26 @@ class SimulationModel(mesa.Model):
 
         self.iterations = 10
 
-        self.num_of_hares = 0
+        self.num_of_hares = 5
         self.num_of_wolves = 5
 
         self.scheduler = mesa.time.BaseScheduler(self)
 
-        # for i in range(self.num_of_hares):
-        #     hare = Hare()
-        #     self.scheduler.add(hare)
-
-        for i in range(self.num_of_wolves):
-            wolf = Wolf(self.num_of_hares+i, self)
-            self.scheduler.add(wolf)
+        for _ in range(self.num_of_hares):
+            hare = Hare(self)
+            self.scheduler.add(hare)
 
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            self.grid.place_agent(wolf, (x, y))
+            self.grid.place_agent(hare, (x, y))
+
+        for _ in range(self.num_of_wolves):
+            fox = Fox(self)
+            self.scheduler.add(fox)
+
+            x = self.random.randrange(self.width)
+            y = self.random.randrange(self.height)
+            self.grid.place_agent(fox, (x, y))
 
         self.step()
 
@@ -41,5 +42,5 @@ class SimulationModel(mesa.Model):
         self.scheduler.step()
 
     def run(self):
-        for i in range(self.iterations):
+        for _ in range(self.iterations):
             self.step()
