@@ -1,6 +1,9 @@
+from src.SimulationModel import SimulationModel
+
 
 def main():
-    print("Hello World!")
+    model = SimulationModel()
+    model.run()
 
 
 if __name__ == "__main__":
