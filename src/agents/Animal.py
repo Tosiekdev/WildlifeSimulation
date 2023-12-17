@@ -7,7 +7,6 @@ class Animal(mesa.Agent, ABC):
 
     def __init__(
         self,
-        unique_id: int,
         model: mesa.Model,
         lifetime: int,
         consumption: int,
@@ -15,7 +14,7 @@ class Animal(mesa.Agent, ABC):
         trace: int,
         view_range: int
     ):
-        super().__init__(unique_id, model)
+        super().__init__(model.next_id(), model)
         self.lifetime = lifetime
         self.consumption = consumption
         self.speed = speed

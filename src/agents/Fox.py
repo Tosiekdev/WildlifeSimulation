@@ -1,5 +1,4 @@
-from .Animal import Animal
-
+from .animal import Animal
 
 class Fox(Animal):
 
@@ -11,7 +10,7 @@ class Fox(Animal):
         trace=10,
         view_range=135
     ):
-        super().__init__(model.next_id(), model, lifetime, consumption, speed, trace, view_range)
+        super().__init__(model, lifetime, consumption, speed, trace, view_range)
 
     def step(self) -> None:
         self.random_move()
