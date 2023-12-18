@@ -15,8 +15,8 @@ class SimulationModel(mesa.Model):
 
         self.iterations = 10
 
-        self.num_of_hares = 5
-        self.num_of_foxes = 5
+        self.num_of_hares = 100
+        self.num_of_foxes = 10
 
         self.scheduler = mesa.time.BaseScheduler(self)
 
@@ -36,7 +36,6 @@ class SimulationModel(mesa.Model):
             y = self.random.randrange(self.height)
             self.grid.place_agent(hare, (x, y))
 
-        # self.step()
         self.running = True
 
     def step(self):

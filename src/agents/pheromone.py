@@ -6,8 +6,8 @@ class Pheromone(mesa.Agent):
         self,
         model: mesa.Model,
         value: int = 1,
-        evaporation_rate: float = 0.1,
-        diffusion_rate: float = 0.2
+        evaporation_rate: float = 0.4,
+        diffusion_rate: float = 0.1
     ):
         super().__init__(model.next_id(), model)
         self.value = value
@@ -26,8 +26,12 @@ class Pheromone(mesa.Agent):
     @property
     def avg_value(self) -> float:
         neighbors = self.model.grid.get_neighbors(self.pos, True)
-        total_value = sum([neighbor.value for neighbor in neighbors if type(neighbor) is Pheromone])
+        
+        if len(neighbors) == 0:
+            return 0
 
+        total_value = sum([neighbor.value for neighbor in neighbors if type(neighbor) is Pheromone])
+        
         return total_value / len(neighbors)
 
     def update_value(self) -> None:
@@ -43,6 +47,12 @@ class Pheromone(mesa.Agent):
             self.model.scheduler.remove(self)
             return
 
-        neighbors = self.model.grid.iter_neighborhood(self.pos, True)
-        for (x, y) in neighbors:
-            print(x, y)
+        positions = self.model.grid.get_neighborhood(self.pos, True)
+        for pos in positions:
+            if self.model.grid.is_cell_empty(pos):
+                Pheromone.create(self.model,pos, self.value)
+            else:
+                neighbor = self.model.grid[pos]
+                if type(neighbor) is Pheromone:
+                    neighbor.value = self.value
+

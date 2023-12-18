@@ -16,7 +16,14 @@ class Hare(Animal):
         """
         Leave a trace of pheromone.
         """
-        Pheromone.create(self.model, self.pos, self.trace)
+        neighbors = self.model.grid.get_neighbors(self.pos, False, True, 0)
+        neighbors = [neighbor for neighbor in neighbors if type(neighbor) is Pheromone]
+
+        if len(neighbors) == 0:
+            Pheromone.create(self.model, self.pos, self.trace)
+        else:
+            pheromone = neighbors[0]
+            pheromone.value = self.trace
 
     def step(self) -> None:
         self.random_move()
