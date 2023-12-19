@@ -8,17 +8,25 @@ class SimulationModel(mesa.Model):
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
 
-        self.width = 282
-        self.height = 282
+        self.width = 20
+        self.height = 20
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, False)
 
         self.iterations = 10
 
-        self.num_of_hares = 5
-        self.num_of_wolves = 5
+        self.num_of_hares = 100
+        self.num_of_foxes = 10
 
         self.scheduler = mesa.time.BaseScheduler(self)
+
+        for _ in range(self.num_of_foxes):
+            fox = Fox(self)
+            self.scheduler.add(fox)
+
+            x = self.random.randrange(self.width)
+            y = self.random.randrange(self.height)
+            self.grid.place_agent(fox, (x, y))
 
         for _ in range(self.num_of_hares):
             hare = Hare(self)
@@ -28,19 +36,11 @@ class SimulationModel(mesa.Model):
             y = self.random.randrange(self.height)
             self.grid.place_agent(hare, (x, y))
 
-        for _ in range(self.num_of_wolves):
-            fox = Fox(self)
-            self.scheduler.add(fox)
-
-            x = self.random.randrange(self.width)
-            y = self.random.randrange(self.height)
-            self.grid.place_agent(fox, (x, y))
-
-        self.step()
+        self.running = True
 
     def step(self):
         self.scheduler.step()
 
-    def run(self):
+    def run_model(self):
         for _ in range(self.iterations):
             self.step()
