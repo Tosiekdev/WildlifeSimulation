@@ -15,8 +15,8 @@ class SimulationModel(mesa.Model):
 
         self.iterations = 10
 
-        self.num_of_hares = 100
-        self.num_of_foxes = 10
+        self.num_of_hares = 10
+        self.num_of_foxes = 1
 
         self.scheduler = mesa.time.BaseScheduler(self)
 

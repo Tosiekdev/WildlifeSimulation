@@ -7,6 +7,10 @@ class Direction(Enum):
     RIGHT = 2
     DOWN = 3
     LEFT = 4
+    TOP_LEFT = 5
+    TOP_RIGHT = 6
+    DOWN_LEFT = 7
+    DOWN_RIGHT = 8
 
 
 class Sound(mesa.Agent):
@@ -21,15 +25,16 @@ class Sound(mesa.Agent):
         self.direction = direction
 
     def add_sound(self, x, y):
-        self.edge = False
-        new_sound = Sound(self.model, self.r, self.direction, True)
-        self.model.scheduler.add(new_sound)
-        self.model.grid.place_agent(new_sound, (x, y))
+        if not self.model.grid.out_of_bounds((x, y)):
+            self.edge = False
+            new_sound = Sound(self.model, self.r, self.direction, True)
+            self.model.scheduler.add(new_sound)
+            self.model.grid.place_agent(new_sound, (x, y))
 
     def step(self) -> None:
         self.r += 1
         self.force = Sound.FORCE / self.r ** 2
-        if self.force < Sound.MIN_FORCE:
+        if self.r > 5:
             self.model.grid.remove_agent(self)
             self.model.scheduler.remove(self)
             return
@@ -55,4 +60,30 @@ class Sound(mesa.Agent):
                 if self.edge:
                     self.add_sound(x, y - 1)
                 pass
-        self.grid.move_agent(self, (x, y))
+            case Direction.TOP_LEFT:
+                x -= 1
+                if self.edge:
+                    self.add_sound(x, y + 1)
+                pass
+            case Direction.TOP_RIGHT:
+                y += 1
+                if self.edge:
+                    self.add_sound(x + 1, y)
+                pass
+            case Direction.DOWN_RIGHT:
+                x += 1
+                if self.edge:
+                    self.add_sound(x, y - 1)
+                pass
+            case Direction.DOWN_LEFT:
+                y -= 1
+                if self.edge:
+                    self.add_sound(x - 1, y)
+                pass
+
+        self.edge = False
+        if not self.model.grid.out_of_bounds((x, y)):
+            self.model.grid.move_agent(self, (x, y))
+        else:
+            self.model.grid.remove_agent(self)
+            self.model.scheduler.remove(self)

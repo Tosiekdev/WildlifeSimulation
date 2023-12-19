@@ -45,6 +45,21 @@ def fox_hare_portrayal(agent):
         portrayal["w"] = 1
         portrayal["h"] = 1
 
+    elif type(agent) is Sound:
+        shades_of_blue = [
+            "#063DFF",
+            "#3763FF",
+            "#6889FF",
+            "#99AFFF",
+            "#E2E8FE"
+        ]
+        portrayal["Color"] = [shades_of_blue[agent.r - 1]]
+        portrayal["Shape"] = "rect"
+        portrayal["Filled"] = "true"
+        portrayal["Layer"] = 0
+        portrayal["w"] = 1
+        portrayal["h"] = 1
+
     return portrayal
 
 canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 20, 20, 500, 500)
