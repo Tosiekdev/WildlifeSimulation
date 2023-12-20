@@ -26,7 +26,6 @@ class Sound(mesa.Agent):
 
     def add_sound(self, x: int, y: int):
         if not self.model.grid.out_of_bounds((x, y)):
-            self.edge = False
             new_sound = Sound(self.model, self.r, self.direction, True)
             self.model.scheduler.add(new_sound)
             self.model.grid.place_agent(new_sound, (x, y))
