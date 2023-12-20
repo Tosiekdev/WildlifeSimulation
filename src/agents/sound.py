@@ -75,7 +75,6 @@ class Sound(mesa.Agent):
                 y -= 1
                 if self.edge:
                     self.add_sound(x - 1, y)
-                pass
 
         self.edge = False
         if not self.model.grid.out_of_bounds((x, y)):
