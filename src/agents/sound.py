@@ -49,7 +49,6 @@ class Sound(mesa.Agent):
                 x += 1
                 if self.edge:
                     self.add_sound(x, y + 1)
-                pass
             case Direction.DOWN:
                 y -= 1
                 if self.edge:
