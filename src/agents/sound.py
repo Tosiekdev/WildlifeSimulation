@@ -24,7 +24,7 @@ class Sound(mesa.Agent):
         self.edge = edge
         self.direction = direction
 
-    def add_sound(self, x, y):
+    def add_sound(self, x: int, y: int):
         if not self.model.grid.out_of_bounds((x, y)):
             self.edge = False
             new_sound = Sound(self.model, self.r, self.direction, True)
