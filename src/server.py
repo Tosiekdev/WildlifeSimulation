@@ -1,6 +1,9 @@
 import mesa
 from .agents import *
 from .model import SimulationModel
+from .agents.fox_habitat import FoxHabitat
+from .agents.hare_habitat import HareHabitat
+from .agents.hare_food import HareFood
 
 def fox_hare_portrayal(agent):
     if agent is None:
@@ -44,7 +47,29 @@ def fox_hare_portrayal(agent):
         portrayal["Layer"] = 0
         portrayal["w"] = 1
         portrayal["h"] = 1
+    elif type(agent) is HareFood:
+        portrayal["Shape"] = "src/resources/plant.png"
+        portrayal["scale"] = 0.9
+        portrayal["Layer"] = 1
+        portrayal["w"] = 1
+        portrayal["h"] = 1
 
+    elif type(agent) is HareHabitat:
+        portrayal["Shape"] = "src/resources/rabbit_hole.png"
+        portrayal["Filled"] = "true"
+        portrayal["Layer"] = 0
+        portrayal["w"] = 1
+        portrayal["h"] = 1
+        portrayal["Color"] = "purple"
+
+    elif type(agent) is FoxHabitat:
+        portrayal["Shape"] = "src/resources/fox_cave.png"
+        portrayal["Filled"] = "true"
+        portrayal["Layer"] = 0
+        portrayal["w"] = 1
+        portrayal["h"] = 1
+        portrayal["Color"] = "blue"
+    
     return portrayal
 
 canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 20, 20, 500, 500)
