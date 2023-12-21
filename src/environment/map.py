@@ -40,7 +40,7 @@ def add_food_to_map(
         number_of_hare_habitats (int): Number of hare habitats.
 
     Returns:
-        np.ndarray: Updated array with 0,1,2,3,4 values onlt.
+        np.ndarray: Updated array with 0,1,2,3,4 values only.
     """
     size_of_forest = np.count_nonzero(map)
     size_of_meadow = (map.shape[0] * map.shape[1]) - size_of_forest
