@@ -27,7 +27,6 @@ class SimulationModel(mesa.Model):
 
         pre_map = create_map()
         map = add_food_to_map(pre_map, self.number_of_plant, 3, 3)
-        print(map)
         for y in reversed(range(self.height)):
             for x in range(self.width):
                 if map[y][x] == 2:
