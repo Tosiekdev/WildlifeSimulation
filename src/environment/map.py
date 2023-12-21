@@ -59,7 +59,6 @@ def add_food_to_map(
                     updated_map[i][j] = 2
                 hare_index += 1
             elif map[i][j] == 1:
-                print(fox_habitat_indexes)
                 if fox_index in fox_habitat_indexes:
                     updated_map[i][j] = 4
                 fox_index += 1
