@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import mesa
 from enum import Enum
 
