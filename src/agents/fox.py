@@ -36,7 +36,5 @@ class Fox(Animal):
             elif ngh[1] < self.pos[1] and ngh[0] < self.pos[0]:
                 Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_LEFT, True)
 
-            # self.model.grid.place_agent(sound, ngh)
-            # self.model.scheduler.add(sound)
         self.random_move()
         print(self)
