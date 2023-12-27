@@ -47,6 +47,7 @@ def fox_hare_portrayal(agent):
         portrayal["Layer"] = 0
         portrayal["w"] = 1
         portrayal["h"] = 1
+
     elif type(agent) is HareFood:
         portrayal["Shape"] = "src/resources/plant.png"
         portrayal["scale"] = 0.9
@@ -64,6 +65,10 @@ def fox_hare_portrayal(agent):
         ]
         portrayal["Color"] = [shades_of_blue[agent.r - 1]]
         portrayal["Shape"] = "rect"
+        portrayal["Filled"] = "true"
+        portrayal["Layer"] = 0
+        portrayal["w"] = 1
+        portrayal["h"] = 1
 
     elif type(agent) is HareHabitat:
         portrayal["Shape"] = "src/resources/rabbit_hole.png"
