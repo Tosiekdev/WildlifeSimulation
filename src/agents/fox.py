@@ -24,7 +24,7 @@ class Fox(Animal):
             elif ngh[0] > self.pos[0] and ngh[1] == self.pos[1]:
                 Sound.create_sound(self.model, ngh, 1, Direction.RIGHT, True)
             elif ngh[1] < self.pos[1] and ngh[0] == self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.DOWN, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM, True)
             elif ngh[1] > self.pos[1] and ngh[0] == self.pos[0]:
                 Sound.create_sound(self.model, ngh, 1, Direction.TOP, True)
             elif ngh[1] > self.pos[1] and ngh[0] < self.pos[0]:
@@ -32,9 +32,9 @@ class Fox(Animal):
             elif ngh[1] > self.pos[1] and ngh[0] > self.pos[0]:
                 Sound.create_sound(self.model, ngh, 1, Direction.TOP_RIGHT, True)
             elif ngh[1] < self.pos[1] and ngh[0] > self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.DOWN_RIGHT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_RIGHT, True)
             elif ngh[1] < self.pos[1] and ngh[0] < self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.DOWN_LEFT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_LEFT, True)
 
             # self.model.grid.place_agent(sound, ngh)
             # self.model.scheduler.add(sound)

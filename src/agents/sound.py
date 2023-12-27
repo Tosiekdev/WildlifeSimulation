@@ -7,12 +7,12 @@ from enum import Enum
 class Direction(Enum):
     TOP = 1
     RIGHT = 2
-    DOWN = 3
+    BOTTOM = 3
     LEFT = 4
     TOP_LEFT = 5
     TOP_RIGHT = 6
-    DOWN_LEFT = 7
-    DOWN_RIGHT = 8
+    BOTTOM_LEFT = 7
+    BOTTOM_RIGHT = 8
 
 
 class Sound(mesa.Agent):
@@ -55,7 +55,7 @@ class Sound(mesa.Agent):
                 if self.edge:
                     Sound.create_sound(self.model, (x, y + 1), self.r, self.direction)
                 pass
-            case Direction.DOWN:
+            case Direction.BOTTOM:
                 y -= 1
                 if self.edge:
                     Sound.create_sound(self.model, (x + 1, y), self.r, self.direction)
@@ -71,11 +71,11 @@ class Sound(mesa.Agent):
                 y += 1
                 if self.edge:
                     Sound.create_sound(self.model, (x + 1, y), self.r, self.direction)
-            case Direction.DOWN_RIGHT:
+            case Direction.BOTTOM_RIGHT:
                 x += 1
                 if self.edge:
                     Sound.create_sound(self.model, (x, y - 1), self.r, self.direction)
-            case Direction.DOWN_LEFT:
+            case Direction.BOTTOM_LEFT:
                 y -= 1
                 if self.edge:
                     Sound.create_sound(self.model, (x - 1, y), self.r, self.direction)
