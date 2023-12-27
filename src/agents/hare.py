@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Tuple, Union, override
+from typing import Tuple, Union
 import math
 import mesa
 
@@ -61,7 +61,7 @@ class Hare(Animal):
 
     @staticmethod
     def create(model: mesa.Model, pos: Tuple[int, int]) -> None:
-        hare = Hare(model)
+        hare = Hare(model, **model.hare_params)
         model.grid.place_agent(hare, pos)
         model.scheduler.add(hare)
 

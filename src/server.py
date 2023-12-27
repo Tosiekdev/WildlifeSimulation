@@ -90,7 +90,60 @@ def fox_hare_portrayal(agent):
 
 canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 20, 20, 500, 500)
 
-model_params = {}
+model_params = {
+    "title": mesa.visualization.StaticText("Parameters:"),
+    "one_week": mesa.visualization.Slider(
+        "One Week", 70, 1, 1000
+    ),
+    "initial_plant": mesa.visualization.Slider(
+        "Initial Plant", 60, 1, 300
+    ),
+    "initial_fox": mesa.visualization.Slider(
+        "Initial Fox Population", 1, 1, 300
+    ),
+    "initial_hare": mesa.visualization.Slider(
+        "Initial Hare Population", 1, 1, 300
+    ),
+    "hare_lifetime": mesa.visualization.Slider(
+        "Hare Lifetime", 200, 100, 300
+    ),
+    "hare_consumption": mesa.visualization.Slider(
+        "Hare Consumption", 5, 1, 20
+    ),
+    "hare_speed": mesa.visualization.Slider(
+        "Hare Speed", 2, 1, 5
+    ),
+    "hare_trace": mesa.visualization.Slider(
+        "Hare Trace", 1, 0, 1, 0.01
+    ),
+    "hare_view_range": mesa.visualization.Slider(
+        "Hare View Range", 5, 1, 100
+    ),
+    "hare_view_angle": mesa.visualization.Slider(
+        "Hare View Angle", 350, 1, 360
+    ),
+    "hare_hearing_range": mesa.visualization.Slider(
+        "Hare Hearing Range", 20, 1, 100
+    ),
+    "hare_sprint_speed": mesa.visualization.Slider(
+        "Hare Sprint Speed", 4, 1, 5
+    ),
+    "hare_sprint_duration": mesa.visualization.Slider(
+        "Hare Sprint Duration", 10, 1, 100
+    ),
+    "hare_sprint_cool_down": mesa.visualization.Slider(
+        "Hare Sprint Cool Down", 20, 1, 100
+    ),
+    "hare_sprint_distance": mesa.visualization.Slider(
+        "Hare Sprint Distance", 4, 1, 100
+    ),
+    "hare_no_movement_distance": mesa.visualization.Slider(
+        "Hare No Movement Distance", 8, 1, 100
+    ),
+    "hare_no_movement_duration": mesa.visualization.Slider(
+        "Hare No Movement Duration", 10, 1, 100
+    )
+}
 
 server = mesa.visualization.ModularServer(
     SimulationModel,
