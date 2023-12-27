@@ -18,10 +18,11 @@ class SimulationModel(mesa.Model):
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, False)
 
-        self.iterations = 10
-
-        self.num_of_hares = 10
-        self.num_of_foxes = 10
+        self.iterations = 100
+        self.one_week = 70
+        
+        self.num_of_hares = 1
+        self.num_of_foxes = 0
 
         self.scheduler = mesa.time.BaseScheduler(self)
 
@@ -33,14 +34,14 @@ class SimulationModel(mesa.Model):
                     food = HareFood(self)
                     self.scheduler.add(food)
                     self.grid.place_agent(food, (x, self.height - 1 - y))
-                elif map[y][x] == 3:
-                    hare_habitat = HareHabitat(self)
-                    self.scheduler.add(hare_habitat)
-                    self.grid.place_agent(hare_habitat, (x, self.height - 1 - y))
-                elif map[y][x] == 4:
-                    fox_habitat = FoxHabitat(self)
-                    self.scheduler.add(fox_habitat)
-                    self.grid.place_agent(fox_habitat, (x, self.height - 1 - y))
+                # elif map[y][x] == 3:
+                #     hare_habitat = HareHabitat(self)
+                #     self.scheduler.add(hare_habitat)
+                #     self.grid.place_agent(hare_habitat, (x, self.height - 1 - y))
+                # elif map[y][x] == 4:
+                #     fox_habitat = FoxHabitat(self)
+                #     self.scheduler.add(fox_habitat)
+                #     self.grid.place_agent(fox_habitat, (x, self.height - 1 - y))
 
         for _ in range(self.num_of_foxes):
             fox = Fox(self)
@@ -50,12 +51,10 @@ class SimulationModel(mesa.Model):
             self.grid.place_agent(fox, (x, y))
 
         for _ in range(self.num_of_hares):
-            hare = Hare(self)
-            self.scheduler.add(hare)
-
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            self.grid.place_agent(hare, (x, y))
+
+            Hare.create(self, (x, y))
 
         self.running = True
 

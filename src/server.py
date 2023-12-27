@@ -14,14 +14,14 @@ def fox_hare_portrayal(agent):
     if type(agent) is Hare:
         portrayal["Shape"] = 'src/resources/hare.png'
         portrayal["scale"] = 0.9
-        portrayal["Layer"] = 1
+        portrayal["Layer"] = 2
         portrayal["w"] = 1
         portrayal["h"] = 1
 
     elif type(agent) is Fox:
         portrayal["Shape"] = 'src/resources/fox.png'
         portrayal["scale"] = 0.9
-        portrayal["Layer"] = 1
+        portrayal["Layer"] = 2
         portrayal["w"] = 1
         portrayal["h"] = 1
 
@@ -44,14 +44,14 @@ def fox_hare_portrayal(agent):
         portrayal["Color"] = [shades_of_yellow[index]]
         portrayal["Shape"] = "rect"
         portrayal["Filled"] = "true"
-        portrayal["Layer"] = 0
+        portrayal["Layer"] = 1
         portrayal["w"] = 1
         portrayal["h"] = 1
 
-    elif type(agent) is HareFood:
+    elif type(agent) is HareFood and not agent.eaten:
         portrayal["Shape"] = "src/resources/plant.png"
         portrayal["scale"] = 0.9
-        portrayal["Layer"] = 1
+        portrayal["Layer"] = 0
         portrayal["w"] = 1
         portrayal["h"] = 1
 

@@ -29,7 +29,7 @@ class Hare(Animal):
         """
         Leave a trace of pheromone.
         """
-        neighbors = self.model.grid.get_neighbors(self.pos, False, True, 0)
+        neighbors = self.model.grid[self.pos]
         neighbors = [neighbor for neighbor in neighbors if type(neighbor) is Pheromone]
 
         if len(neighbors) == 0:
@@ -75,7 +75,7 @@ class Hare(Animal):
         """
         Eat food.
         """
-        neighbors = self.model.grid.get_neighbors(self.pos, False, True, 0)
+        neighbors = self.model.grid[self.pos]
         neighbors = [neighbor for neighbor in neighbors if type(neighbor) is HareFood and not neighbor.eaten]
 
         if len(neighbors) > 0:
