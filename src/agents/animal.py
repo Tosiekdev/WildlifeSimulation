@@ -24,7 +24,8 @@ class Animal(mesa.Agent, ABC):
         consumption: int,
         speed: int,
         trace: int,
-        view_range: int
+        view_range: int,
+        view_angle: int = 360
     ):
         super().__init__(model.next_id(), model)
         self.lifetime = lifetime
@@ -32,6 +33,7 @@ class Animal(mesa.Agent, ABC):
         self.speed = speed
         self.trace = trace
         self.view_range = view_range
+        self.view_angle = view_angle
         self.view_direction = choice(list(ViewDirection))
         self.eaten = 0
 
@@ -52,13 +54,13 @@ class Animal(mesa.Agent, ABC):
         self.model.grid.remove_agent(self)
         self.model.scheduler.remove(self)
 
-    def get_neighbors_within_angle(self, angle, distance):
+    def get_neighbors_within_angle(self):
         neighbors = []
         possible_neighbors = self.model.grid.get_neighbors(
             self.pos,
             moore=True,
             include_center=False,
-            radius=distance
+            radius=self.view_range
         )
         for agent in possible_neighbors:
             if agent.unique_id != self.unique_id:
@@ -73,18 +75,22 @@ class Animal(mesa.Agent, ABC):
                 angle_diff = abs((angle_to_agent - int(self.view_direction) + 180) % 360 - 180)
 
                 # If the angle difference is within the desired view angle, consider it a neighbor
-                if angle_diff <= angle // 2:
+                if angle_diff <= self.view_angle // 2:
                     neighbors.append(agent)
 
         return neighbors
 
-    def random_move(self) -> None:
+    def random_move(self, distance: int = 1) -> None:
         """
         Step one cell in any allowable direction.
         """
 
         # Pick the next cell from the adjacent cells.
-        next_moves = self.model.grid.get_neighborhood(self.pos, True)
+        next_moves = self.model.grid.get_neighborhood(
+            self.pos,
+            moore=True,
+            radius=distance
+        )
         next_move = self.random.choice(next_moves)
 
         # Change view direction
