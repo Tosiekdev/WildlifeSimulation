@@ -1,12 +1,16 @@
+from enum import Enum
 from typing import Tuple, Union, override
 import math
 import mesa
 
+
+from .fox import Fox
 from .sound import Sound
 from .hare_food import HareFood
 from .pheromone import Pheromone
 from .animal import Animal, ViewDirection
 
+distance = lambda p1, p2: math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2) 
 def get_surrounding_points(position: Tuple[int, int], radius: int = 1):
     x, y = position
     surroundings = []
@@ -21,6 +25,11 @@ def get_surrounding_points(position: Tuple[int, int], radius: int = 1):
 
     return surroundings
 
+class HareStatus(Enum):
+    NORMAL = 0
+    SPRINTING = 1
+    NO_MOVEMENT = 2
+
 class Hare(Animal):
     def __init__(self,
         model,
@@ -28,12 +37,27 @@ class Hare(Animal):
         consumption=5,
         speed=2,
         trace=1,
-        view_range=50,
+        view_range=5,
         view_angle=350,
-        hearing_range=20
+        hearing_range=20,
+        sprint_speed=4,
+        sprint_duration=10,
+        sprint_cool_down=10,
+        sprint_distance=4,
+        no_movement_distance=8,
+        no_movement_duration=10
     ):
         super().__init__(model, lifetime, consumption, speed, trace, view_range, view_angle)
         self.hearing_range = hearing_range
+        self.sprint_speed = sprint_speed
+        self.sprint_duration = sprint_duration
+        self.sprint_cool_down = sprint_cool_down
+        self.sprint_distance = sprint_distance
+        self.no_movement_distance = no_movement_distance
+        self.no_movement_duration = no_movement_duration
+        self.status = HareStatus.NORMAL
+        self.iteration = 0
+        self.cool_down_iteration = 0
 
     @staticmethod
     def create(model: mesa.Model, pos: Tuple[int, int]) -> None:
@@ -78,19 +102,19 @@ class Hare(Animal):
 
         if not food:
             return None
+        r = self.random_movement()
+        food.append(r)
 
-        food.append(self.random_movement())
-
-        distance = lambda p1, p2: math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2) 
         min_distance = float('inf')
         closest_food_pos = None
 
         for f in food:
             dist = distance(f, self.pos) + sum([sound.get(pos, 0) for pos in get_surrounding_points(f)]) * Sound.FORCE
+            if r == f:
+                dist += self.speed * math.sqrt(2)
             if dist < min_distance:
                 min_distance = dist
                 closest_food_pos = f
-
         return closest_food_pos
 
     def move(self, destination: Tuple[int, int]) -> None:
@@ -152,15 +176,25 @@ class Hare(Animal):
         else:
             return True
 
+    def check_threats(self) -> float:
+        """
+        Check if there are any threats in the view range.
+        """
+        neighbors = self.get_neighbors_within_angle()
+        threats = [distance(neighbor.pos, self.pos) for neighbor in neighbors if type(neighbor) is Fox]
+
+        return 0 if len(threats) < 1 else min(threats)
+
     def random_movement(self) -> None:
         """
         Step one cell in any allowable direction.
         """
+        current_speed = self.sprint_speed if self.status == HareStatus.SPRINTING else self.speed
         # Pick the next cell from the adjacent cells.
         next_moves = self.model.grid.get_neighborhood(
             self.pos,
             moore=True,
-            radius=self.speed
+            radius=current_speed
         )
 
         # Find the next move with the least sound.
@@ -177,11 +211,38 @@ class Hare(Animal):
             self.remove()
         else:
             self.lifetime -= 1
-            self.eat_food()
-            food_pos = self.find_food()
-            if food_pos:
-                self.move(food_pos)
-            else:
-                self.move(self.random_movement())
+            threats = self.check_threats()
+            match self.status:
+                case HareStatus.NORMAL if threats > self.sprint_distance:
+                    self.iteration = 1
+                    self.status = HareStatus.NO_MOVEMENT
+                case HareStatus.NORMAL if self.cool_down_iteration == 0 and threats < self.sprint_distance:
+                    self.iteration = 1
+                    self.status = HareStatus.SPRINTING
+                    self.move(self.random_movement())
+                case HareStatus.NORMAL:
+                    self.eat_food()
+                    food_pos = self.find_food()
+                    if food_pos:
+                        self.move(food_pos)
+                    else:
+                        self.move(self.random_movement())
+                case HareStatus.SPRINTING if self.iteration < self.sprint_duration:
+                    self.iteration += 1
+                    self.move(self.random_movement())
+                case HareStatus.SPRINTING:
+                    self.status = HareStatus.NORMAL
+                    self.cool_down_iteration = self.sprint_cool_down
+                    self.move(self.random_movement())
+                case HareStatus.NO_MOVEMENT if self.cool_down_iteration == 0 and threats < self.sprint_distance:
+                    self.iteration = 1
+                    self.status = HareStatus.SPRINTING
+                    self.move(self.random_movement())
+                case HareStatus.NO_MOVEMENT if self.iteration < self.no_movement_duration:
+                    self.iteration += 1
+                case HareStatus.NO_MOVEMENT:
+                    self.status = HareStatus.NORMAL
+                    self.move(self.random_movement())
+
             self.leave_trace()
             print(self)
