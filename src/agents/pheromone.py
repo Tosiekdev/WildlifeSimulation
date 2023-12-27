@@ -47,12 +47,6 @@ class Pheromone(mesa.Agent):
             self.model.scheduler.remove(self)
             return
 
-        positions = self.model.grid.get_neighborhood(self.pos, True)
-        for pos in positions:
+        for pos in self.model.grid.iter_neighborhood(self.pos, True):
             if self.model.grid.is_cell_empty(pos):
                 Pheromone.create(self.model,pos, self.value)
-            else:
-                neighbor = self.model.grid[pos]
-                if type(neighbor) is Pheromone:
-                    neighbor.value = self.value
-
