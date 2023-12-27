@@ -59,32 +59,26 @@ class Sound(mesa.Agent):
                 y -= 1
                 if self.edge:
                     Sound.create_sound(self.model, (x + 1, y), self.r, self.direction)
-                pass
             case Direction.LEFT:
                 x -= 1
                 if self.edge:
                     Sound.create_sound(self.model, (x, y - 1), self.r, self.direction)
-                pass
             case Direction.TOP_LEFT:
                 x -= 1
                 if self.edge:
                     Sound.create_sound(self.model, (x, y + 1), self.r, self.direction)
-                pass
             case Direction.TOP_RIGHT:
                 y += 1
                 if self.edge:
                     Sound.create_sound(self.model, (x + 1, y), self.r, self.direction)
-                pass
             case Direction.DOWN_RIGHT:
                 x += 1
                 if self.edge:
                     Sound.create_sound(self.model, (x, y - 1), self.r, self.direction)
-                pass
             case Direction.DOWN_LEFT:
                 y -= 1
                 if self.edge:
                     Sound.create_sound(self.model, (x - 1, y), self.r, self.direction)
-                pass
 
         self.edge = False
         if not self.model.grid.out_of_bounds((x, y)):
