@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import mesa
 
 from .animal import Animal
@@ -15,6 +17,12 @@ class Fox(Animal):
                  view_range=135
                  ):
         super().__init__(model, lifetime, consumption, speed, trace, view_range)
+
+    @staticmethod
+    def create(model: mesa.Model, pos: Tuple[int, int]):
+        fox = Fox(model)
+        model.grid.place_agent(fox, pos)
+        model.scheduler.add(fox)
 
     def step(self) -> None:
         for ngh in self.model.grid.get_neighborhood(self.pos, moore=True):
