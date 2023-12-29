@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from numpy import arctan2, degrees
 from random import choice
 from enum import IntEnum
+from typing import Tuple
 import mesa
 
 class ViewDirection(IntEnum):
@@ -13,6 +14,20 @@ class ViewDirection(IntEnum):
     BOTTOM_RIGHT = -45
     BOTTOM_LEFT = -135
     TOP_LEFT = 135
+
+    def get(move: Tuple[int, int]) -> 'ViewDirection':
+        directions = {
+            (1, 1): ViewDirection.BOTTOM_RIGHT,
+            (1, -1): ViewDirection.TOP_RIGHT,
+            (1, 0): ViewDirection.RIGHT,
+            (-1, 1): ViewDirection.BOTTOM_LEFT,
+            (-1, -1): ViewDirection.TOP_LEFT,
+            (-1, 0): ViewDirection.LEFT,
+            (0, 1): ViewDirection.BOTTOM,
+            (0, -1): ViewDirection.TOP
+        }
+
+        return directions.get(move)
 
 class Animal(mesa.Agent, ABC):
     """Animal interface"""
@@ -95,25 +110,10 @@ class Animal(mesa.Agent, ABC):
         next_move = self.random.choice(next_moves)
 
         # Change view direction
-        if next_move[0] > self.pos[0]:
-            if next_move[1] > self.pos[1]:
-                self.view_direction = ViewDirection.BOTTOM_RIGHT
-            elif next_move[1] < self.pos[1]:
-                self.view_direction = ViewDirection.TOP_RIGHT
-            else:
-                self.view_direction = ViewDirection.RIGHT
-        elif next_move[0] < self.pos[0]:
-            if next_move[1] > self.pos[1]:
-                self.view_direction = ViewDirection.BOTTOM_LEFT
-            elif next_move[1] < self.pos[1]:
-                self.view_direction = ViewDirection.TOP_LEFT
-            else:
-                self.view_direction = ViewDirection.LEFT
-        else:
-            if next_move[1] > self.pos[1]:
-                self.view_direction = ViewDirection.BOTTOM
-            elif next_move[1] < self.pos[1]:
-                self.view_direction = ViewDirection.TOP
+        dx = (next_move[0] > self.pos[0]) - (next_move[0] < self.pos[0])
+        dy = (next_move[1] < self.pos[1]) - (next_move[1] > self.pos[1])
+
+        self.view_direction = ViewDirection.get((dx, dy))
 
         # Now move.
         self.model.grid.move_agent(self, next_move)

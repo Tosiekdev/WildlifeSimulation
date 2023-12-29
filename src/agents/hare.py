@@ -130,25 +130,10 @@ class Hare(Animal):
         next_move = (self.pos[0] + x, self.pos[1] + y)
 
         # Change view direction
-        if next_move[0] > self.pos[0]:
-            if next_move[1] > self.pos[1]:
-                self.view_direction = ViewDirection.BOTTOM_RIGHT
-            elif next_move[1] < self.pos[1]:
-                self.view_direction = ViewDirection.TOP_RIGHT
-            else:
-                self.view_direction = ViewDirection.RIGHT
-        elif next_move[0] < self.pos[0]:
-            if next_move[1] > self.pos[1]:
-                self.view_direction = ViewDirection.BOTTOM_LEFT
-            elif next_move[1] < self.pos[1]:
-                self.view_direction = ViewDirection.TOP_LEFT
-            else:
-                self.view_direction = ViewDirection.LEFT
-        else:
-            if next_move[1] > self.pos[1]:
-                self.view_direction = ViewDirection.BOTTOM
-            elif next_move[1] < self.pos[1]:
-                self.view_direction = ViewDirection.TOP
+        dx = (next_move[0] > self.pos[0]) - (next_move[0] < self.pos[0])
+        dy = (next_move[1] < self.pos[1]) - (next_move[1] > self.pos[1])
+
+        self.view_direction = ViewDirection.get((dx, dy))
 
         self.model.grid.move_agent(self, next_move)
 
