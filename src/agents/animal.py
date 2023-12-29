@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from enum import IntEnum
-import math
+from numpy import arctan2, degrees
 from random import choice
+from enum import IntEnum
 import mesa
 
 class ViewDirection(IntEnum):
@@ -68,8 +68,9 @@ class Animal(mesa.Agent, ABC):
                 dy = agent.pos[1] - self.pos[1]
 
                 # Calculate angle between current agent and the potential neighbor
-                angle_to_agent = math.atan2(dy, dx)
-                angle_to_agent = math.degrees(angle_to_agent) % 360
+
+                angle_to_agent = arctan2(dy, dx)
+                angle_to_agent = degrees(angle_to_agent) % 360
 
                 # Calculate the angle difference (absolute value)
                 angle_diff = abs((angle_to_agent - int(self.view_direction) + 180) % 360 - 180)
