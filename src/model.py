@@ -78,11 +78,9 @@ class SimulationModel(mesa.Model):
                     self.grid.place_agent(fox_habitat, (x, self.height - 1 - y))
 
         for _ in range(self.num_of_foxes):
-            fox = Fox(self)
-            self.scheduler.add(fox)
             x = self.random.randrange(self.width)
             y = self.random.randrange(self.height)
-            self.grid.place_agent(fox, (x, y))
+            Fox.create(self, (x, y))
 
         for _ in range(self.num_of_hares):
             x = self.random.randrange(self.width)
