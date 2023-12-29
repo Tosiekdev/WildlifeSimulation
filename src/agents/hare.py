@@ -1,6 +1,7 @@
 from enum import Enum
+from numpy import array, sqrt
+from numpy import linalg as LA
 from typing import Tuple, Union
-import math
 import mesa
 
 
@@ -10,7 +11,7 @@ from .hare_food import HareFood
 from .pheromone import Pheromone
 from .animal import Animal, ViewDirection
 
-distance = lambda p1, p2: math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2) 
+distance = lambda p1, p2: LA.norm(array(p1) - array(p2))
 def get_surrounding_points(position: Tuple[int, int], radius: int = 1):
     x, y = position
     surroundings = []
@@ -111,7 +112,7 @@ class Hare(Animal):
         for f in food:
             dist = distance(f, self.pos) + sum([sound.get(pos, 0) for pos in get_surrounding_points(f)]) * Sound.FORCE
             if r == f:
-                dist += self.speed * math.sqrt(2)
+                dist += self.speed * sqrt(2)
             if dist < min_distance:
                 min_distance = dist
                 closest_food_pos = f
