@@ -19,7 +19,7 @@ class Pheromone(mesa.Agent):
 
     @staticmethod
     def create(model: mesa.Model, pos: Tuple[int, int], value = 1) -> None:
-        pheromone = Pheromone(model, value)
+        pheromone = Pheromone(model, value, **model.pheromone_params)
         model.grid.place_agent(pheromone, pos)
         model.scheduler.add(pheromone)
 

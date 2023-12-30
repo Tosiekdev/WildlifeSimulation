@@ -142,6 +142,12 @@ model_params = {
     ),
     "hare_no_movement_duration": mesa.visualization.Slider(
         "Hare No Movement Duration", 10, 1, 100
+    ),
+    "pheromone_evaporation_rate": mesa.visualization.Slider(
+        "Pheromone Evaporation Rate", 0.4, 0, 1, 0.01
+    ),
+    "pheromone_diffusion_rate": mesa.visualization.Slider(
+        "Pheromone Diffusion Rate", 0.1, 0, 1, 0.01
     )
 }
 

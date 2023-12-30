@@ -27,6 +27,8 @@ class SimulationModel(mesa.Model):
             hare_sprint_distance: int,
             hare_no_movement_distance: int,
             hare_no_movement_duration: int,
+            pheromone_evaporation_rate: float,
+            pheromone_diffusion_rate: float,
             *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
 
@@ -56,6 +58,11 @@ class SimulationModel(mesa.Model):
             "sprint_distance": hare_sprint_distance,
             "no_movement_distance": hare_no_movement_distance,
             "no_movement_duration": hare_no_movement_duration
+        }
+
+        self.pheromone_params = {
+            "evaporation_rate": pheromone_evaporation_rate,
+            "diffusion_rate": pheromone_diffusion_rate
         }
 
         self.scheduler = mesa.time.BaseScheduler(self)
