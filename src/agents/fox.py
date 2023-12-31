@@ -1,4 +1,5 @@
 import importlib
+from enum import Enum
 from typing import Tuple
 
 import mesa
@@ -7,6 +8,12 @@ import numpy as np
 from .animal import Animal
 from .sound import Sound, Direction
 from .pheromone import Pheromone
+
+
+class State(Enum):
+    SNEAKING = 1
+    WALKING = 2
+    SPRINTING = 3
 
 
 class Fox(Animal):
@@ -25,6 +32,7 @@ class Fox(Animal):
         self.smelling_range = smelling_range
         self.home = home
         self.hunting = True
+        self.state = State.WALKING
 
     @staticmethod
     def create(model: mesa.Model, pos: Tuple[int, int]):
@@ -89,23 +97,32 @@ class Fox(Animal):
                 self.hunting = False
 
     def make_noise(self):
+        force = 10
+        match self.state:
+            case State.SNEAKING:
+                force = 1
+            case State.SPRINTING:
+                force = 10
+            case _:
+                pass
+
         for ngh in self.model.grid.get_neighborhood(self.pos, moore=True):
             if ngh[0] < self.pos[0] and ngh[1] == self.pos[1]:
-                Sound.create_sound(self.model, ngh, 1, Direction.LEFT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.LEFT, True, force)
             elif ngh[0] > self.pos[0] and ngh[1] == self.pos[1]:
-                Sound.create_sound(self.model, ngh, 1, Direction.RIGHT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.RIGHT, True, force)
             elif ngh[1] < self.pos[1] and ngh[0] == self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM, True, force)
             elif ngh[1] > self.pos[1] and ngh[0] == self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.TOP, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.TOP, True, force)
             elif ngh[1] > self.pos[1] and ngh[0] < self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.TOP_LEFT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.TOP_LEFT, True, force)
             elif ngh[1] > self.pos[1] and ngh[0] > self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.TOP_RIGHT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.TOP_RIGHT, True, force)
             elif ngh[1] < self.pos[1] and ngh[0] > self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_RIGHT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_RIGHT, True, force)
             elif ngh[1] < self.pos[1] and ngh[0] < self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_LEFT, True)
+                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_LEFT, True, force)
 
     def step(self) -> None:
         self.lifetime -= 1
