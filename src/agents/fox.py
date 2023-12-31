@@ -1,3 +1,4 @@
+import importlib
 from typing import Tuple
 
 import mesa
@@ -68,7 +69,6 @@ class Fox(Animal):
 
             self.model.grid.move_agent(self, (self.pos[0]+dx, self.pos[1]+dy))
 
-
         else:
             self.random_move()
 
@@ -77,6 +77,10 @@ class Fox(Animal):
         if self.lifetime <= 0:
             self.remove()
             return
+        hare = importlib.import_module("src.agents.hare")
+        for neighbor in self.model.grid.get_neighbors(self.pos, moore=False, include_center=True):
+            if type(neighbor) is hare.Hare and neighbor.pos == self.pos:
+                neighbor.remove()
 
         for ngh in self.model.grid.get_neighborhood(self.pos, moore=True):
             if ngh[0] < self.pos[0] and ngh[1] == self.pos[1]:
