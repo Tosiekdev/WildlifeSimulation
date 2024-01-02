@@ -18,7 +18,7 @@ class FoxHabitat(mesa.Agent):
         """
         Function called manually after the agent is created.
         """
-        for _ in range(self.model.num_of_hares):
+        for _ in range(self.model.num_of_foxes):
             Fox.create(self.model, self.pos)
             
     def step(self) -> None:
