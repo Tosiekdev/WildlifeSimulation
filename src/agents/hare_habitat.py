@@ -18,6 +18,10 @@ class HareHabitat(mesa.Agent):
         self.mating_range = mating_range
     
     def init(self) -> None:
+        """
+        Function called manually after the agent is created.
+        
+        """
         for _ in range(self.model.num_of_hares):
             Hare.create(self.model, self.pos)
     
