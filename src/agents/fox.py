@@ -38,6 +38,7 @@ class Fox(Animal):
         self.state = State.WALKING
         self.attack_range = attack_range
         self.focused_hare = None
+        self.eaten = 0
 
     @staticmethod
     def create(model: mesa.Model, pos: Tuple[int, int]):
@@ -64,6 +65,7 @@ class Fox(Animal):
             self.focused_hare.remove()
             self.hunting = False
             self.focused_hare = None
+        self.eaten += 4
 
     def go_in_direction(self, direction):
         dx = direction[0] - self.pos[0]
@@ -179,9 +181,20 @@ class Fox(Animal):
             elif ngh[1] < self.pos[1] and ngh[0] < self.pos[0]:
                 Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_LEFT, True, force)
 
+    def hungry(self) -> bool:
+        if self.model.scheduler.steps > 0 and self.model.scheduler.steps % self.model.one_week == 0:
+            self.eaten = 0
+            if self.eaten < self.consumption:
+                return True
+        return False
+
     def step(self) -> None:
         self.lifetime -= 1
         if self.lifetime <= 0:
+            self.remove()
+            return
+
+        if self.hungry():
             self.remove()
             return
 
