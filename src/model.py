@@ -1,10 +1,12 @@
 from typing import Any
 import mesa
+import numpy as np
 from .agents import *
 from.environment.map import create_map, add_food_to_map
 from .agents.fox_habitat import FoxHabitat
 from .agents.hare_habitat import HareHabitat
 from .agents.hare_food import HareFood
+from .agents.hare_food_factory import HareFoodFactory
 
 class SimulationModel(mesa.Model):
     "A model for simulating Fox and Hare (predator-prey) ecosystem modelling."
@@ -14,6 +16,10 @@ class SimulationModel(mesa.Model):
             initial_plant: int,
             initial_fox: int,
             initial_hare: int,
+            initial_number_of_hares_habitats: int,
+            initial_number_of_foxes_habitats: int,
+            initial_food_amount: int,
+            initial_food_frequency: int,
             hare_lifetime: int,
             hare_consumption: int,
             hare_speed: int,
@@ -32,8 +38,8 @@ class SimulationModel(mesa.Model):
             *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
 
-        self.width = 20
-        self.height = 20
+        self.width = 40
+        self.height = 40
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, False)
 
@@ -43,7 +49,10 @@ class SimulationModel(mesa.Model):
         self.num_of_hares = initial_hare
         self.num_of_foxes = initial_fox
         self.number_of_plant = initial_plant
-
+        self.number_of_hares_habitats = initial_number_of_hares_habitats
+        self.number_of_foxes_habitats = initial_number_of_foxes_habitats
+        self.food_amount = initial_food_amount
+        self.food_frequency = initial_food_frequency
         self.hare_params = {
             "lifetime": hare_lifetime,
             "consumption": hare_consumption,
@@ -67,34 +76,25 @@ class SimulationModel(mesa.Model):
 
         self.scheduler = mesa.time.BaseScheduler(self)
 
-        pre_map = create_map()
-        map = add_food_to_map(pre_map, self.number_of_plant, 3, 3)
-        for y in reversed(range(self.height)):
-            for x in range(self.width):
-                if map[y][x] == 2:
-                    food = HareFood(self)
-                    self.scheduler.add(food)
-                    self.grid.place_agent(food, (x, self.height - 1 - y))
-                elif map[y][x] == 3:
-                    hare_habitat = HareHabitat(self)
-                    self.scheduler.add(hare_habitat)
-                    self.grid.place_agent(hare_habitat, (x, self.height - 1 - y))
-                elif map[y][x] == 4:
-                    fox_habitat = FoxHabitat(self)
-                    self.scheduler.add(fox_habitat)
-                    self.grid.place_agent(fox_habitat, (x, self.height - 1 - y))
+        map = create_map(self.height, self.width)
+        self.map = add_food_to_map(map, self.number_of_plant, self.number_of_foxes_habitats, self.number_of_hares_habitats)
 
-        for _ in range(self.num_of_foxes):
-            x = self.random.randrange(self.width)
-            y = self.random.randrange(self.height)
-            Fox.create(self, (x, y))
+        agent_mapping = {
+            2: HareFood,
+            3: HareHabitat,
+            4: FoxHabitat
+        }
 
-        for _ in range(self.num_of_hares):
-            x = self.random.randrange(self.width)
-            y = self.random.randrange(self.height)
-
-            Hare.create(self, (x, y))
-
+        for (y, x), agent_type in np.ndenumerate(self.map):
+            agent_class = agent_mapping.get(agent_type)
+            if agent_class:
+                agent = agent_class(self)
+                self.scheduler.add(agent)
+                self.grid.place_agent(agent, (x, self.height - 1 - y))
+                if agent_class == HareHabitat or agent_class == FoxHabitat:
+                    agent.init()
+                    
+        HareFoodFactory(self, self.food_amount, self.food_frequency)
         self.running = True
 
     def step(self):

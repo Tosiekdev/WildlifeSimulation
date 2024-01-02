@@ -76,7 +76,6 @@ def fox_hare_portrayal(agent):
         portrayal["Layer"] = 0
         portrayal["w"] = 1
         portrayal["h"] = 1
-        portrayal["Color"] = "purple"
 
     elif type(agent) is FoxHabitat:
         portrayal["Shape"] = "src/resources/fox_cave.png"
@@ -84,11 +83,10 @@ def fox_hare_portrayal(agent):
         portrayal["Layer"] = 0
         portrayal["w"] = 1
         portrayal["h"] = 1
-        portrayal["Color"] = "blue"
-    
+        
     return portrayal
 
-canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 20, 20, 500, 500)
+canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 40, 40, 500, 500)
 
 model_params = {
     "title": mesa.visualization.StaticText("Parameters:"),
@@ -103,6 +101,18 @@ model_params = {
     ),
     "initial_hare": mesa.visualization.Slider(
         "Initial Hare Population", 1, 1, 300
+    ),
+    "initial_number_of_hares_habitats": mesa.visualization.Slider(
+            "Initial Number of Hares Habitats", 3, 1, 300
+    ),
+    "initial_number_of_foxes_habitats": mesa.visualization.Slider(
+            "Initial Number of Foxes Habitats", 3, 1, 300
+    ),
+    "initial_food_amount": mesa.visualization.Slider(
+        "Initial Food Amount", 25, 1, 300
+    ),
+    "initial_food_frequency": mesa.visualization.Slider(
+        "Initial Food Frequency", 10, 1, 300
     ),
     "hare_lifetime": mesa.visualization.Slider(
         "Hare Lifetime", 200, 100, 300
