@@ -31,3 +31,4 @@ class FoxHabitat(mesa.Agent):
                 Fox.create(self.model, self.pos)
         else:
             self.mating_season -= 1
+            
