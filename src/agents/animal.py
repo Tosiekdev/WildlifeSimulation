@@ -96,6 +96,9 @@ class Animal(mesa.Agent, ABC):
 
         return neighbors
 
+    def sees(self, agent: 'Animal') -> bool:
+        return agent in self.get_neighbors_within_angle()
+
     def random_move(self, distance: int = 1) -> None:
         """
         Step one cell in any allowable direction.
