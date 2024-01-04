@@ -44,3 +44,4 @@ class HareFood(mesa.Agent):
         model.grid.place_agent(hare_food, pos)
         model.scheduler.add(hare_food)
        
+       

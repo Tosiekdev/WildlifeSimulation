@@ -13,6 +13,7 @@ class FoxHabitat(mesa.Agent):
         self.mating_season = mating_season
         self.model = model
         self.mating_range = mating_range
+        self.initial_mating_season = mating_season
 
     def init(self) -> None:
         """
@@ -27,11 +28,11 @@ class FoxHabitat(mesa.Agent):
         It creates few foxes in the habitat every mating season.
         """
         if self.mating_season == 0:
-            self.mating_season = 365
+            self.mating_season = self.initial_mating_season
             self.model.num_of_foxes += 1
             number_of_foxes_to_create = np.random.randint(self.mating_range[0], self.mating_range[1])
             for _ in range(number_of_foxes_to_create):
                 Fox.create(self.model, self.pos)
         else:
             self.mating_season -= 1
-            
+

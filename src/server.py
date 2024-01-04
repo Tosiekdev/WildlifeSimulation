@@ -114,6 +114,24 @@ model_params = {
     "initial_food_frequency": mesa.visualization.Slider(
         "Initial Food Frequency", 10, 1, 300
     ),
+    "initlal_fox_mating_season": mesa.visualization.Slider(
+        "Initial Fox Mating Season", 365, 1, 1000
+    ),
+    "initial_fox_min_mating_range": mesa.visualization.Slider(
+        "Initial Fox Min Mating Range", 1, 1, 100
+    ),
+    "initial_fox_max_mating_range": mesa.visualization.Slider(
+        "Initial Fox Max Mating Range", 11, 1, 100
+    ),
+    "initial_hare_mating_season": mesa.visualization.Slider(
+        "Initial Hare Mating Season", 100, 1, 1000
+    ),
+    "initial_hare_min_mating_range": mesa.visualization.Slider(
+        "Initial Hare Min Mating Range", 3, 1, 100
+    ),
+    "initial_hare_max_mating_range": mesa.visualization.Slider(
+        "Initial Hare Max Mating Range", 5, 1, 100
+    ),
     "hare_lifetime": mesa.visualization.Slider(
         "Hare Lifetime", 200, 100, 300
     ),

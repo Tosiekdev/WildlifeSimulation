@@ -34,3 +34,4 @@ class HareFoodFactory(mesa.Agent):
                 y = int(possible_positions[1][random_index])
                 HareFood.create(self.model, (y, self.model.height - 1 - x))
     
+    
