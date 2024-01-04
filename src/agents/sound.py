@@ -19,7 +19,7 @@ class Sound(mesa.Agent):
     FORCE = 10.0
     MIN_FORCE = 0.1
 
-    def __init__(self, model: mesa.Model, r: int, direction: Direction, edge: bool = False, force=None):
+    def __init__(self, model: mesa.Model, r: int, direction: Direction, edge: bool = False, force: float = None):
         super().__init__(model.next_id(), model)
         self.force = force if force else Sound.FORCE / r ** 2
         self.r = r
@@ -27,7 +27,12 @@ class Sound(mesa.Agent):
         self.direction = direction
 
     @staticmethod
-    def create_sound(model: mesa.Model, pos: Tuple[int, int], radius: int, direction: Direction, edge=True, force=None):
+    def create_sound(model: mesa.Model,
+                     pos: Tuple[int, int],
+                     radius: int,
+                     direction: Direction,
+                     edge: bool = True,
+                     force: float = None):
         if not model.grid.out_of_bounds(pos):
             new_sound = Sound(model, radius, direction, edge, force)
             model.scheduler.add(new_sound)

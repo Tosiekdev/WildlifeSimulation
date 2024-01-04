@@ -87,7 +87,8 @@ class Fox(Animal):
             dx = 0
 
         self.model.grid.move_agent(self, (self.pos[0] + dx, self.pos[1] + dy))
-        self.view_direction = ViewDirection.get((dx, dy))
+        self.view_direction = ViewDirection.get((dx, -dy))
+        print("Fox", self.view_direction.name)
         self.kill()
 
     def return_to_home(self):
