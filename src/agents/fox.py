@@ -21,7 +21,7 @@ class Fox(Animal):
 
     def __init__(self,
                  model,
-                 home: Tuple,
+                 home: Tuple[int, int],
                  lifetime=160,
                  consumption=5,
                  speed=6,
