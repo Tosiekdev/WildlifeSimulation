@@ -1,35 +1,44 @@
 from typing import Any
 import mesa
 from .agents import *
-from.environment.map import create_map, add_food_to_map
+from .environment.map import create_map, add_food_to_map
 from .agents.fox_habitat import FoxHabitat
 from .agents.hare_habitat import HareHabitat
 from .agents.hare_food import HareFood
+
 
 class SimulationModel(mesa.Model):
     "A model for simulating Fox and Hare (predator-prey) ecosystem modelling."
 
     def __init__(self,
-            one_week: int,
-            initial_plant: int,
-            initial_fox: int,
-            initial_hare: int,
-            hare_lifetime: int,
-            hare_consumption: int,
-            hare_speed: int,
-            hare_trace: float,
-            hare_view_range: int,
-            hare_view_angle: int,
-            hare_hearing_range: int,
-            hare_sprint_speed: int,
-            hare_sprint_duration: int,
-            hare_sprint_cool_down: int,
-            hare_sprint_distance: int,
-            hare_no_movement_distance: int,
-            hare_no_movement_duration: int,
-            pheromone_evaporation_rate: float,
-            pheromone_diffusion_rate: float,
-            *args: Any, **kwargs: Any):
+                 one_week: int,
+                 initial_plant: int,
+                 initial_fox: int,
+                 initial_hare: int,
+                 hare_lifetime: int,
+                 hare_consumption: int,
+                 hare_speed: int,
+                 hare_trace: float,
+                 hare_view_range: int,
+                 hare_view_angle: int,
+                 hare_hearing_range: int,
+                 hare_sprint_speed: int,
+                 hare_sprint_duration: int,
+                 hare_sprint_cool_down: int,
+                 hare_sprint_distance: int,
+                 hare_no_movement_distance: int,
+                 hare_no_movement_duration: int,
+                 pheromone_evaporation_rate: float,
+                 pheromone_diffusion_rate: float,
+                 fox_lifetime: int,
+                 fox_consumption: int,
+                 fox_speed: int,
+                 fox_trace: float,
+                 fox_view_range: int,
+                 fox_view_angle: int,
+                 fox_smelling_range: int,
+                 fox_attack_range: int,
+                 *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
 
         self.width = 20
@@ -39,7 +48,7 @@ class SimulationModel(mesa.Model):
 
         self.iterations = 100
         self.one_week = one_week
-        
+
         self.num_of_hares = initial_hare
         self.num_of_foxes = initial_fox
         self.number_of_plant = initial_plant
@@ -58,6 +67,17 @@ class SimulationModel(mesa.Model):
             "sprint_distance": hare_sprint_distance,
             "no_movement_distance": hare_no_movement_distance,
             "no_movement_duration": hare_no_movement_duration
+        }
+
+        self.fox_params = {
+            "lifetime": fox_lifetime,
+            "consumption": fox_consumption,
+            "speed": fox_speed,
+            "trace": fox_trace,
+            "view_range": fox_view_range,
+            "view_angle": fox_view_angle,
+            "smelling_range": fox_smelling_range,
+            "attack_range": fox_attack_range
         }
 
         self.pheromone_params = {

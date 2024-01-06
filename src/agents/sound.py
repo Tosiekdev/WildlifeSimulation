@@ -14,22 +14,42 @@ class Direction(Enum):
     BOTTOM_LEFT = 7
     BOTTOM_RIGHT = 8
 
+    @staticmethod
+    def get(move: Tuple[int, int]) -> 'Direction':
+        direction = {
+            (-1, 0): Direction.LEFT,
+            (-1, 1): Direction.TOP_LEFT,
+            (0, 1): Direction.TOP,
+            (1, 1): Direction.TOP_RIGHT,
+            (1, 0): Direction.RIGHT,
+            (1, -1): Direction.BOTTOM_RIGHT,
+            (0, -1): Direction.BOTTOM,
+            (-1, -1): Direction.BOTTOM_LEFT
+        }
+
+        return direction.get(move)
+
 
 class Sound(mesa.Agent):
     FORCE = 10.0
     MIN_FORCE = 0.1
 
-    def __init__(self, model: mesa.Model, r: int, direction: Direction, edge: bool = False):
+    def __init__(self, model: mesa.Model, r: int, direction: Direction, edge: bool = False, force: float = None):
         super().__init__(model.next_id(), model)
-        self.force = Sound.FORCE / r ** 2
+        self.force = force if force else Sound.FORCE / r ** 2
         self.r = r
         self.edge = edge
         self.direction = direction
 
     @staticmethod
-    def create_sound(model: mesa.Model, pos: Tuple[int, int], radius: int, direction: Direction, edge=True):
+    def create_sound(model: mesa.Model,
+                     pos: Tuple[int, int],
+                     radius: int,
+                     direction: Direction,
+                     edge: bool = True,
+                     force: float = None):
         if not model.grid.out_of_bounds(pos):
-            new_sound = Sound(model, radius, direction, edge)
+            new_sound = Sound(model, radius, direction, edge, force)
             model.scheduler.add(new_sound)
             model.grid.place_agent(new_sound, pos)
 
