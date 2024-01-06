@@ -14,6 +14,21 @@ class Direction(Enum):
     BOTTOM_LEFT = 7
     BOTTOM_RIGHT = 8
 
+    @staticmethod
+    def get(move: Tuple[int, int]) -> 'Direction':
+        direction = {
+            (-1, 0): Direction.LEFT,
+            (-1, 1): Direction.TOP_LEFT,
+            (0, 1): Direction.TOP,
+            (1, 1): Direction.TOP_RIGHT,
+            (1, 0): Direction.RIGHT,
+            (1, -1): Direction.BOTTOM_RIGHT,
+            (0, -1): Direction.BOTTOM,
+            (-1, -1): Direction.BOTTOM_LEFT
+        }
+
+        return direction.get(move)
+
 
 class Sound(mesa.Agent):
     FORCE = 10.0

@@ -165,22 +165,9 @@ class Fox(Animal):
                 pass
 
         for ngh in self.model.grid.get_neighborhood(self.pos, moore=True):
-            if ngh[0] < self.pos[0] and ngh[1] == self.pos[1]:
-                Sound.create_sound(self.model, ngh, 1, Direction.LEFT, True, force)
-            elif ngh[0] > self.pos[0] and ngh[1] == self.pos[1]:
-                Sound.create_sound(self.model, ngh, 1, Direction.RIGHT, True, force)
-            elif ngh[1] < self.pos[1] and ngh[0] == self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM, True, force)
-            elif ngh[1] > self.pos[1] and ngh[0] == self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.TOP, True, force)
-            elif ngh[1] > self.pos[1] and ngh[0] < self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.TOP_LEFT, True, force)
-            elif ngh[1] > self.pos[1] and ngh[0] > self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.TOP_RIGHT, True, force)
-            elif ngh[1] < self.pos[1] and ngh[0] > self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_RIGHT, True, force)
-            elif ngh[1] < self.pos[1] and ngh[0] < self.pos[0]:
-                Sound.create_sound(self.model, ngh, 1, Direction.BOTTOM_LEFT, True, force)
+            dx = (ngh[0] > self.pos[0]) - (ngh[0] < self.pos[0])
+            dy = (ngh[1] < self.pos[1]) - (ngh[1] > self.pos[1])
+            Sound.create_sound(self.model, ngh, 1, Direction.get((dx, dy)), True, force)
 
     def hungry(self) -> bool:
         if self.model.scheduler.steps > 0 and self.model.scheduler.steps % self.model.one_week == 0:
