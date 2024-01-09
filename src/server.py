@@ -176,7 +176,31 @@ model_params = {
     ),
     "pheromone_diffusion_rate": mesa.visualization.Slider(
         "Pheromone Diffusion Rate", 0.1, 0, 1, 0.01
-    )
+    ),
+    "fox_lifetime": mesa.visualization.Slider(
+        "Fox Lifetime", 160, 100, 300
+    ),
+    "fox_consumption": mesa.visualization.Slider(
+        "Fox Consumption", 5, 1, 20
+    ),
+    "fox_speed": mesa.visualization.Slider(
+        "Fox Speed", 6, 1, 5
+    ),
+    "fox_trace": mesa.visualization.Slider(
+        "Fox Trace", 5, 0, 10, 1
+    ),
+    "fox_view_range": mesa.visualization.Slider(
+        "Fox View Range", 6, 1, 100
+    ),
+    "fox_view_angle": mesa.visualization.Slider(
+        "Fox View Angle", 135, 1, 360
+    ),
+    "fox_smelling_range": mesa.visualization.Slider(
+        "Fox Smelling Range", 10, 1, 100
+    ),
+    "fox_attack_range": mesa.visualization.Slider(
+        "Fox View Range", 3, 1, 100
+    ),
 }
 
 server = mesa.visualization.ModularServer(

@@ -3,9 +3,11 @@ import mesa
 import numpy as np
 from .agents import *
 from .environment.map import create_map, add_food_to_map
+from .environment.map import create_map, add_food_to_map
 from .agents.fox_habitat import FoxHabitat
 from .agents.hare_habitat import HareHabitat
 from .agents.hare_food import HareFood
+
 from .agents.hare_food_factory import HareFoodFactory
 
 
@@ -43,6 +45,14 @@ class SimulationModel(mesa.Model):
         hare_no_movement_duration: int,
         pheromone_evaporation_rate: float,
         pheromone_diffusion_rate: float,
+        fox_lifetime: int,
+        fox_consumption: int,
+        fox_speed: int,
+        fox_trace: float,
+        fox_view_range: int,
+        fox_view_angle: int,
+        fox_smelling_range: int,
+        fox_attack_range: int,
         *args: Any,
         **kwargs: Any
     ):
@@ -83,6 +93,28 @@ class SimulationModel(mesa.Model):
             "sprint_distance": hare_sprint_distance,
             "no_movement_distance": hare_no_movement_distance,
             "no_movement_duration": hare_no_movement_duration,
+        }
+
+        self.fox_params = {
+            "lifetime": fox_lifetime,
+            "consumption": fox_consumption,
+            "speed": fox_speed,
+            "trace": fox_trace,
+            "view_range": fox_view_range,
+            "view_angle": fox_view_angle,
+            "smelling_range": fox_smelling_range,
+            "attack_range": fox_attack_range,
+        }
+
+        self.fox_params = {
+            "lifetime": fox_lifetime,
+            "consumption": fox_consumption,
+            "speed": fox_speed,
+            "trace": fox_trace,
+            "view_range": fox_view_range,
+            "view_angle": fox_view_angle,
+            "smelling_range": fox_smelling_range,
+            "attack_range": fox_attack_range,
         }
 
         self.pheromone_params = {
