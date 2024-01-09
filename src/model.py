@@ -106,17 +106,6 @@ class SimulationModel(mesa.Model):
             "attack_range": fox_attack_range,
         }
 
-        self.fox_params = {
-            "lifetime": fox_lifetime,
-            "consumption": fox_consumption,
-            "speed": fox_speed,
-            "trace": fox_trace,
-            "view_range": fox_view_range,
-            "view_angle": fox_view_angle,
-            "smelling_range": fox_smelling_range,
-            "attack_range": fox_attack_range,
-        }
-
         self.pheromone_params = {
             "evaporation_rate": pheromone_evaporation_rate,
             "diffusion_rate": pheromone_diffusion_rate,
