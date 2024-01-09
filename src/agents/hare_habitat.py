@@ -16,6 +16,7 @@ class HareHabitat(mesa.Agent):
         self.mating_season = mating_season
         self.model = model
         self.mating_range = mating_range
+        self.initial_mating_season = mating_season
     
     def init(self) -> None:
         """
@@ -33,7 +34,7 @@ class HareHabitat(mesa.Agent):
         
         """
         if self.mating_season == 0:
-            self.mating_season = 100
+            self.mating_season = self.initial_mating_season
             self.model.num_of_hares += 1
             number_of_hares_to_create = np.random.randint(self.mating_range[0], self.mating_range[1])
             for _ in range(number_of_hares_to_create):
