@@ -51,6 +51,7 @@ class Animal(mesa.Agent, ABC):
         self.view_angle = view_angle
         self.view_direction = choice(list(ViewDirection))
         self.eaten = 0
+        self.is_alive = True
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__} {self.pos}"
@@ -68,6 +69,7 @@ class Animal(mesa.Agent, ABC):
         """
         self.model.grid.remove_agent(self)
         self.model.scheduler.remove(self)
+        self.is_alive = False
 
     def get_neighbors_within_angle(self):
         neighbors = []

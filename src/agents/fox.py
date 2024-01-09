@@ -64,6 +64,7 @@ class Fox(Animal):
         if self.focused_hare and self.focused_hare.pos == self.pos:
             self.focused_hare.remove()
             self.hunting = False
+            self.focused_hare.is_alive = False
             self.focused_hare = None
         self.eaten += 4
 
@@ -119,7 +120,7 @@ class Fox(Animal):
         Moves fox according to his surroundings.
         """
 
-        if self.focused_hare:
+        if self.focused_hare and self.focused_hare.is_alive:
             dist = max(abs(self.pos[0]-self.focused_hare.pos[0]), abs(self.pos[1]-self.focused_hare.pos[1]))
             if dist <= self.view_range:
                 if dist <= self.attack_range:

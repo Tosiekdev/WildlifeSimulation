@@ -1,3 +1,4 @@
+from typing import Tuple
 import mesa
 
 
@@ -9,7 +10,7 @@ class HareFood(mesa.Agent):
         @param: mmodel - Mesa model .
         """
         super().__init__(model.next_id(), model)
-        self.lifetime: int = 200
+        self.lifetime: int = 350
         self.eaten: bool = False
 
     def step(self) -> None:
@@ -17,7 +18,11 @@ class HareFood(mesa.Agent):
         Performs a single of agent.
 
         """
-        pass
+        if self.lifetime <= 0:
+            self.model.grid.remove_agent(self)
+            self.model.scheduler.remove(self)
+        else:
+            self.lifetime -= 1
 
     def eat_food(self) -> None:
         """
@@ -25,3 +30,16 @@ class HareFood(mesa.Agent):
 
         """
         self.eaten = True
+
+    @staticmethod
+    def create(model: mesa.Model, pos: Tuple[int, int]) -> None:
+        """
+        Creates hare food.
+
+        @param: model - Mesa model.
+        @param: pos - position of hare food.
+
+        """
+        hare_food = HareFood(model)
+        model.grid.place_agent(hare_food, pos)
+        model.scheduler.add(hare_food)
