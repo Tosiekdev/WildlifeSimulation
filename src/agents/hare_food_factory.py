@@ -2,8 +2,8 @@ import mesa
 import numpy as np
 from .hare_food import HareFood
 
+
 class HareFoodFactory(mesa.Agent):
-    
     def __init__(self, model: mesa.Model, food_amount: int = 25, frequency: int = 10):
         """
         Class responsible for creating food for Hares.
@@ -17,7 +17,7 @@ class HareFoodFactory(mesa.Agent):
         self.iteration = 0
         self.frquency = frequency
         self.model.scheduler.add(self)
-        
+
     def step(self) -> None:
         """
         Performs a single of agent.
@@ -33,5 +33,3 @@ class HareFoodFactory(mesa.Agent):
                 x = int(possible_positions[0][random_index])
                 y = int(possible_positions[1][random_index])
                 HareFood.create(self.model, (y, self.model.height - 1 - x))
-    
-    

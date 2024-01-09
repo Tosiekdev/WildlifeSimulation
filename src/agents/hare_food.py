@@ -30,9 +30,9 @@ class HareFood(mesa.Agent):
 
         """
         self.eaten = True
-        
+
     @staticmethod
-    def create(model:mesa.Model, pos: Tuple[int, int]) -> None:
+    def create(model: mesa.Model, pos: Tuple[int, int]) -> None:
         """
         Creates hare food.
 
@@ -43,5 +43,3 @@ class HareFood(mesa.Agent):
         hare_food = HareFood(model)
         model.grid.place_agent(hare_food, pos)
         model.scheduler.add(hare_food)
-       
-       
