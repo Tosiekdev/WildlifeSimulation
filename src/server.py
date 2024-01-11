@@ -57,13 +57,18 @@ def fox_hare_portrayal(agent):
 
     elif type(agent) is Sound:
         shades_of_blue = [
-            "#063DFF",
-            "#3763FF",
-            "#6889FF",
-            "#99AFFF",
-            "#E2E8FE"
+            "#0000FF",
+            "#0000CC",
+            "#000099",
+            "#336699",
+            "#3399FF",
+            "#66B2FF",
+            "#99CCFF",
+            "#CCE5FF",
+            "#66A3FF",
+            "#0066CC"
         ]
-        portrayal["Color"] = [shades_of_blue[agent.r - 1]]
+        portrayal["Color"] = [shades_of_blue[min(9, agent.r-1)]]
         portrayal["Shape"] = "rect"
         portrayal["Filled"] = "true"
         portrayal["Layer"] = 0
@@ -184,7 +189,7 @@ model_params = {
         "Fox Consumption", 5, 1, 20
     ),
     "fox_speed": mesa.visualization.Slider(
-        "Fox Speed", 6, 1, 5
+        "Fox Speed", 2, 1, 5
     ),
     "fox_trace": mesa.visualization.Slider(
         "Fox Trace", 5, 0, 10, 1
@@ -200,6 +205,12 @@ model_params = {
     ),
     "fox_attack_range": mesa.visualization.Slider(
         "Fox View Range", 3, 1, 100
+    ),
+    "fox_sprint_speed": mesa.visualization.Slider(
+        "Fox Sprint Speed", 3, 1, 5
+    ),
+    "fox_sneak_speed": mesa.visualization.Slider(
+        "Fox Sneak Speed", 1, 1, 5
     ),
 }
 

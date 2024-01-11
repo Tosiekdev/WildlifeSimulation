@@ -65,7 +65,7 @@ class Sound(mesa.Agent):
         Propagates the sound.
         """
         self.update_vale()
-        if self.r > 5:
+        if self.force < 0.1:
             self.model.grid.remove_agent(self)
             self.model.scheduler.remove(self)
             return

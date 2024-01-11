@@ -53,6 +53,8 @@ class SimulationModel(mesa.Model):
         fox_view_angle: int,
         fox_smelling_range: int,
         fox_attack_range: int,
+        fox_sprint_speed: int,
+        fox_sneak_speed: int,
         *args: Any,
         **kwargs: Any
     ):
@@ -104,6 +106,8 @@ class SimulationModel(mesa.Model):
             "view_angle": fox_view_angle,
             "smelling_range": fox_smelling_range,
             "attack_range": fox_attack_range,
+            "sprint_speed": fox_sprint_speed,
+            "sneak_speed": fox_sneak_speed,
         }
 
         self.pheromone_params = {
