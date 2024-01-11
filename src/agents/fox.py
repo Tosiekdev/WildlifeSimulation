@@ -24,7 +24,7 @@ class Fox(Animal):
                  home: Tuple[int, int],
                  lifetime=160,
                  consumption=5,
-                 speed=6,
+                 speed=2,
                  trace=5,
                  view_range=6,
                  view_angle=135,
@@ -60,7 +60,11 @@ class Fox(Animal):
 
         return smell
 
-    def kill(self):
+    def kill(self) -> None:
+        """
+        Kills focused hare.
+        """
+
         if self.focused_hare and self.focused_hare.pos == self.pos:
             self.focused_hare.remove()
             self.hunting = False
@@ -68,36 +72,51 @@ class Fox(Animal):
             self.focused_hare = None
         self.eaten += 4
 
-    def go_in_direction(self, direction):
+    def go_in_direction(self, direction: Tuple[int, int]) -> None:
+        """
+        Moves fox in specified direction.
+        """
         dx = direction[0] - self.pos[0]
         dy = direction[1] - self.pos[1]
         direction = np.array([dx, dy], dtype=float)
         direction /= np.linalg.norm(direction)
+        dir_x = 0
+        dir_y = 0
         if direction[1] > np.sin(22.5 / 180):
-            dy = 1
+            dy = min(dy, self.speed)
+            dir_y = -1
         elif direction[1] < -np.sin(22.5 / 180):
-            dy = -1
+            dy = max(dy, -self.speed)
+            dir_y = 1
         else:
             dy = 0
 
         if direction[0] > np.cos(67.5 / 180):
-            dx = 1
+            dx = min(dx, self.speed)
+            dir_x = 1
         elif direction[0] < -np.cos(67.5 / 180):
-            dx = -1
+            dx = max(dx, -self.speed)
+            dir_x = -1
         else:
             dx = 0
 
         self.model.grid.move_agent(self, (self.pos[0] + dx, self.pos[1] + dy))
-        self.view_direction = ViewDirection.get((dx, -dy))
+        self.view_direction = ViewDirection.get((dir_x, dir_y))
         print("Fox", self.view_direction.name)
         self.kill()
 
     def return_to_home(self):
+        """
+        Fox moves in destination of his home and does not hunt.
+        """
         self.go_in_direction(self.home)
         if self.pos == self.home:
             self.hunting = True
 
     def get_hares_in_attack_range(self) -> List[Animal]:
+        """
+        Returns hares that are seen in the fox view range.
+        """
         hare = importlib.import_module("src.agents.hare")
         view_range = self.view_range
         self.view_range = self.attack_range
@@ -108,6 +127,9 @@ class Fox(Animal):
         return hares
 
     def get_hares_in_sneaking_range(self) -> List[Animal]:
+        """
+        Returns hares that are seen in the fox sneaking range.
+        """
         hare = importlib.import_module("src.agents.hare")
         hares_in_attack_range = self.get_hares_in_attack_range()
         neighbors = self.get_neighbors_within_angle()
@@ -115,7 +137,7 @@ class Fox(Animal):
 
         return hares
 
-    def hunt(self):
+    def hunt(self) -> None:
         """
         Moves fox according to his surroundings.
         """
@@ -155,7 +177,10 @@ class Fox(Animal):
         else:
             self.random_move()
 
-    def make_noise(self):
+    def make_noise(self) -> None:
+        """
+        Creates noise around last postition.
+        """
         force = 10
         match self.state:
             case State.SNEAKING:
@@ -171,6 +196,9 @@ class Fox(Animal):
             Sound.create_sound(self.model, ngh, 1, Direction.get((dx, dy)), True, force)
 
     def hungry(self) -> bool:
+        """
+        Checks if fox has eaten enough in passing week.
+        """
         if self.model.scheduler.steps > 0 and self.model.scheduler.steps % self.model.one_week == 0:
             self.eaten = 0
             if self.eaten < self.consumption:

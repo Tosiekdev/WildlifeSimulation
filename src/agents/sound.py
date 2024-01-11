@@ -53,11 +53,17 @@ class Sound(mesa.Agent):
             model.scheduler.add(new_sound)
             model.grid.place_agent(new_sound, pos)
 
-    def update_vale(self):
+    def update_vale(self) -> None:
+        """
+        Updates the radius and current force of the sound.
+        """
         self.r += 1
         self.force = Sound.FORCE / self.r ** 2
 
     def step(self) -> None:
+        """
+        Propagates the sound.
+        """
         self.update_vale()
         if self.r > 5:
             self.model.grid.remove_agent(self)
