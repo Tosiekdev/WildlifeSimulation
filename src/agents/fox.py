@@ -9,6 +9,7 @@ import numpy as np
 from .animal import Animal, ViewDirection
 from .sound import Sound, Direction
 from .pheromone import Pheromone
+from .fox_habitat import FoxHabitat
 
 
 class State(Enum):
@@ -21,7 +22,8 @@ class Fox(Animal):
 
     def __init__(self,
                  model,
-                 home: Tuple[int, int],
+                 home: FoxHabitat,
+                 adult: True,
                  lifetime=160,
                  consumption=5,
                  speed=2,
@@ -43,11 +45,14 @@ class Fox(Animal):
         self.eaten = 0
         self.sprint_speed = sprint_speed
         self.sneak_speed = sneak_speed
+        self.adult = adult
+        self.starting_age = self.lifetime
+        self.leftovers = 0
 
     @staticmethod
-    def create(model: mesa.Model, pos: Tuple[int, int]):
-        fox = Fox(model, pos)
-        model.grid.place_agent(fox, pos)
+    def create(model: mesa.Model, home: FoxHabitat, adult: bool):
+        fox = Fox(model, home, adult)
+        model.grid.place_agent(fox, home.pos)
         model.scheduler.add(fox)
 
     def smell(self) -> dict:
@@ -71,10 +76,13 @@ class Fox(Animal):
 
         if self.focused_hare and self.focused_hare.pos == self.pos:
             self.focused_hare.remove()
-            self.hunting = False
             self.focused_hare.is_alive = False
             self.focused_hare = None
-        self.eaten += 4
+            self.eaten += 4
+            if self.eaten > self.consumption:
+                self.leftovers += self.eaten - self.consumption
+                self.eaten = self.consumption
+                self.hunting = False
 
     def go_in_direction(self, direction: Tuple[int, int]) -> None:
         """
@@ -121,8 +129,10 @@ class Fox(Animal):
         """
         Fox moves in destination of his home and does not hunt.
         """
-        self.go_in_direction(self.home)
-        if self.pos == self.home:
+        self.go_in_direction(self.home.pos)
+        if self.pos == self.home.pos:
+            # self.home.storage += self.leftovers
+            # self.leftovers = 0
             self.hunting = True
 
     def get_hares_in_attack_range(self) -> List[Animal]:
@@ -231,21 +241,53 @@ class Fox(Animal):
                 return True
         return False
 
-    def step(self) -> None:
-        self.lifetime -= 1
-        if self.lifetime <= 0:
-            self.remove()
-            return
-
-        if self.hungry():
-            self.remove()
-            return
-
+    def adult_step(self):
+        """
+        Step done by the adult fox.
+        """
         if self.hunting:
             self.hunt()
         else:
             self.return_to_home()
 
         self.make_noise()
+
+    def baby_step(self):
+        """
+        Step done by not adult fox.
+        """
+        # eat some from home
+        return
+
+    def grow(self) -> None:
+        """
+        Checks if fox is not a baby anymore.
+        """
+        self.lifetime -= 1
+        if not self.adult:
+            if self.starting_age - self.lifetime == 52 * self.model.one_week:
+                self.adult = True
+                self.hunting = True
+                # self.home = FoxHabitat.create()
+
+    def should_die(self) -> bool:
+        self.grow()
+
+        if self.lifetime <= 0:
+            self.remove()
+            return True
+
+        if self.hungry():
+            self.remove()
+            return True
+
+    def step(self) -> None:
+        if self.should_die():
+            return
+
+        if self.adult:
+            self.adult_step()
+        else:
+            self.baby_step()
 
         print(self)
