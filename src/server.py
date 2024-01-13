@@ -1,4 +1,6 @@
 import mesa
+
+from .agents.vaccine_factory import Vaccine
 from .agents import *
 from .model import SimulationModel
 from .agents.fox_habitat import FoxHabitat
@@ -84,6 +86,13 @@ def fox_hare_portrayal(agent):
 
     elif type(agent) is FoxHabitat:
         portrayal["Shape"] = "src/resources/fox_cave.png"
+        portrayal["Filled"] = "true"
+        portrayal["Layer"] = 0
+        portrayal["w"] = 1
+        portrayal["h"] = 1
+    
+    elif type(agent) is Vaccine:
+        portrayal["Shape"] = "src/resources/vaccine.png"
         portrayal["Filled"] = "true"
         portrayal["Layer"] = 0
         portrayal["w"] = 1
@@ -182,6 +191,9 @@ model_params = {
     "pheromone_diffusion_rate": mesa.visualization.Slider(
         "Pheromone Diffusion Rate", 0.1, 0, 1, 0.01
     ),
+    "food_lifetime": mesa.visualization.Slider(
+        "Food Lifetime", 350, 100, 1000
+    ),
     "fox_lifetime": mesa.visualization.Slider(
         "Fox Lifetime", 160, 100, 300
     ),
@@ -211,6 +223,18 @@ model_params = {
     ),
     "fox_sneak_speed": mesa.visualization.Slider(
         "Fox Sneak Speed", 1, 1, 5
+    ),
+    "vaccine_amount": mesa.visualization.Slider(
+        "Vaccine Amount", 10, 1, 100
+    ),
+    "vaccine_frequency": mesa.visualization.Slider(
+        "Vaccine Frequency", 100, 1, 100
+    ),
+    "vaccine_lifetime": mesa.visualization.Slider(
+        "Vaccine LifeTime", 50, 1, 100
+    ),
+    "vaccine_effectiveness": mesa.visualization.Slider(
+        "Vaccine Effectiveness", 15, 0, 1, 0.01
     ),
 }
 

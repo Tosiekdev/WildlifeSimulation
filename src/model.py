@@ -1,6 +1,8 @@
 from typing import Any, Tuple
 import mesa
 import numpy as np
+
+from .agents.vaccine_factory import VaccineFactory
 from .agents import *
 from .environment.map import create_map, add_food_to_map
 from .environment.map import create_map, add_food_to_map
@@ -24,6 +26,7 @@ class SimulationModel(mesa.Model):
         initial_number_of_foxes_habitats: int,
         initial_food_amount: int,
         initial_food_frequency: int,
+        food_lifetime: int,
         initlal_fox_mating_season: int,
         initial_fox_min_mating_range: int,
         initial_fox_max_mating_range: int,
@@ -45,6 +48,7 @@ class SimulationModel(mesa.Model):
         hare_no_movement_duration: int,
         pheromone_evaporation_rate: float,
         pheromone_diffusion_rate: float,
+        
         fox_lifetime: int,
         fox_consumption: int,
         fox_speed: int,
@@ -55,6 +59,10 @@ class SimulationModel(mesa.Model):
         fox_attack_range: int,
         fox_sprint_speed: int,
         fox_sneak_speed: int,
+        vaccine_amount: int,
+        vaccine_frequency: int,
+        vaccine_lifetime: int,
+        vaccine_effectiveness: int,
         *args: Any,
         **kwargs: Any
     ):
@@ -75,6 +83,7 @@ class SimulationModel(mesa.Model):
         self.number_of_foxes_habitats = initial_number_of_foxes_habitats
         self.food_amount = initial_food_amount
         self.food_frequency = initial_food_frequency
+        self.food_lifetime = food_lifetime
         self.fox_mating_season = initlal_fox_mating_season
         self.fox_min_mating_range = initial_fox_min_mating_range
         self.fox_max_mating_range = initial_fox_max_mating_range
@@ -142,7 +151,8 @@ class SimulationModel(mesa.Model):
                 if agent_class == HareHabitat or agent_class == FoxHabitat:
                     agent.init()
 
-        HareFoodFactory(self, self.food_amount, self.food_frequency)
+        HareFoodFactory(self, self.food_amount, self.food_frequency, self.food_lifetime)
+        VaccineFactory(self, vaccine_amount, vaccine_frequency, vaccine_lifetime, vaccine_effectiveness)
         self.running = True
 
     def step(self):

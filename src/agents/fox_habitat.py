@@ -8,12 +8,13 @@ class FoxHabitat(mesa.Agent):
     Class representing fox habitat area.
         
     """
-    def __init__(self, model: mesa.Model, mating_season:int = 365, mating_range: Tuple[int, int] = (1,11)) -> None:
+    def __init__(self, model: mesa.Model, mating_season:int = 365, mating_range: Tuple[int, int] = (1,11),storage:int = 15) -> None:
         super().__init__(model.next_id(), model)
         self.mating_season = mating_season
         self.model = model
         self.mating_range = mating_range
         self.initial_mating_season = mating_season
+        self.storage = storage
 
     def init(self) -> None:
         """
