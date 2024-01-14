@@ -24,15 +24,15 @@ class SimulationModel(mesa.Model):
         initial_hare: int,
         initial_number_of_hares_habitats: int,
         initial_number_of_foxes_habitats: int,
-        initial_food_amount: int,
-        initial_food_frequency: int,
+        food_amount: int,
+        food_frequency: int,
         food_lifetime: int,
-        initlal_fox_mating_season: int,
-        initial_fox_min_mating_range: int,
-        initial_fox_max_mating_range: int,
-        initial_hare_mating_season: int,
-        initial_hare_min_mating_range: int,
-        initial_hare_max_mating_range: int,
+        fox_mating_season: int,
+        fox_min_mating_range: int,
+        fox_max_mating_range: int,
+        hare_mating_season: int,
+        hare_min_mating_range: int,
+        hare_max_mating_range: int,
         hare_lifetime: int,
         hare_consumption: int,
         hare_speed: int,
@@ -81,15 +81,6 @@ class SimulationModel(mesa.Model):
         self.number_of_plant = initial_plant
         self.number_of_hares_habitats = initial_number_of_hares_habitats
         self.number_of_foxes_habitats = initial_number_of_foxes_habitats
-        self.food_amount = initial_food_amount
-        self.food_frequency = initial_food_frequency
-        self.food_lifetime = food_lifetime
-        self.fox_mating_season = initlal_fox_mating_season
-        self.fox_min_mating_range = initial_fox_min_mating_range
-        self.fox_max_mating_range = initial_fox_max_mating_range
-        self.hare_mating_season = initial_hare_mating_season
-        self.hare_min_mating_range = initial_hare_min_mating_range
-        self.hare_max_mating_range = initial_hare_max_mating_range
         self.hare_params = {
             "lifetime": hare_lifetime,
             "consumption": hare_consumption,
@@ -123,6 +114,25 @@ class SimulationModel(mesa.Model):
             "evaporation_rate": pheromone_evaporation_rate,
             "diffusion_rate": pheromone_diffusion_rate,
         }
+        self.fox_habitat_params = {
+            "mating_season": fox_mating_season,
+            "mating_range": (fox_min_mating_range, fox_max_mating_range),
+        }
+        self.hare_habitar_params = {
+            "mating_season": hare_mating_season,
+            "mating_range": (hare_min_mating_range, hare_max_mating_range),
+        }
+        self.hare_food_factory_params = {
+            "food_amount": food_amount,
+            "frequency": food_frequency,
+            "food_lifetime": food_lifetime,
+        }
+        self.vaccine_factory_params = {
+            "vaccine_amount": vaccine_amount,
+            "vaccine_frequency": vaccine_frequency,
+            "vaccine_effectiveness": vaccine_effectiveness,
+            "vaccine_lifetime": vaccine_lifetime,
+        }
 
         self.scheduler = mesa.time.BaseScheduler(self)
 
@@ -137,22 +147,17 @@ class SimulationModel(mesa.Model):
             agent_class = agent_mapping.get(agent_type)
             if agent_class:
                 if agent_class != HareFood:
-                    (mating_season, mating_range) = (
-                        self.fox_mating_season if agent_class == FoxHabitat else self.hare_mating_season,
-                        (self.fox_min_mating_range, self.fox_max_mating_range)
-                        if agent_class == FoxHabitat
-                        else (self.hare_min_mating_range, self.hare_max_mating_range),
-                    )
-                    agent = agent_class(self, mating_season, mating_range)
+                    params = self.fox_habitat_params if agent_class == FoxHabitat else self.hare_habitar_params
+                    agent = agent_class(self,**params)
                 else:
                     agent = agent_class(self)
                 self.scheduler.add(agent)
                 self.grid.place_agent(agent, (x, self.height - 1 - y))
                 if agent_class == HareHabitat or agent_class == FoxHabitat:
-                    agent.init()
+                    agent.create_animals()
 
-        HareFoodFactory(self, self.food_amount, self.food_frequency, self.food_lifetime)
-        VaccineFactory(self, vaccine_amount, vaccine_frequency, vaccine_lifetime, vaccine_effectiveness)
+        HareFoodFactory(self,**self.hare_food_factory_params)
+        VaccineFactory(self, **self.vaccine_factory_params)
         self.running = True
 
     def step(self):

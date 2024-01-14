@@ -3,26 +3,26 @@ import mesa
 import numpy as np
 
 class VaccineFactory(mesa.Agent):
-    def __init__(self, model: mesa.Model, vaccine_amount: int = 25, frequency: int = 10, vaccine_effectivness: int = 20, vaccine_lifetime: int = 50):
+    def __init__(self, model: mesa.Model, vaccine_amount: int = 25, vaccine_frequency: int = 10, vaccine_effectiveness: int = 20, vaccine_lifetime: int = 50):
         """
         Class responsible for creating vaccine for Hares.
 
         @param: model - Mesa model.
         @param: vaccine_amount - amount of vaccine created.
-        @param: frequency - frequency of vaccine creation.
+        @param: vaccine_frequency - vaccine_frequency of vaccine creation.
         """
         super().__init__(model.next_id(), model)
         self.vaccine_amount= vaccine_amount
         self.iteration = 0
-        self.frquency = frequency
+        self.frquency = vaccine_frequency
         self.model.scheduler.add(self)
-        self.vaccine_efeectivness = vaccine_effectivness
+        self.vaccine_efeectivness = vaccine_effectiveness
         self.vaccine_lifetime = vaccine_lifetime
 
     def step(self) -> None:
         """
         Performs a single of agent.
-        Create number of vaccine in given frequency
+        Create number of vaccine in given vaccine_frequency
 
         """
         self.iteration += 1
@@ -45,14 +45,21 @@ class Vaccine(mesa.Agent):
         self.lifetime: int = lifetime
         self.effectivness: int = effectivness
         
+    def remove(self) -> None:
+        """
+        Removes vaccine.
+
+        """
+        self.model.grid.remove_agent(self)
+        self.model.scheduler.remove(self)
+        
     def step(self) -> None:
         """
         Performs a single of agent.
 
         """
         if self.lifetime <= 0:
-            self.model.grid.remove_agent(self)
-            self.model.scheduler.remove(self)
+            self.remove()
         else:
             self.lifetime -= 1
     

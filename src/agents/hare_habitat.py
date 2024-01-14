@@ -18,7 +18,7 @@ class HareHabitat(mesa.Agent):
         self.mating_range = mating_range
         self.initial_mating_season = mating_season
     
-    def init(self) -> None:
+    def create_animals(self) -> None:
         """
         Function called manually after the agent is created.
         

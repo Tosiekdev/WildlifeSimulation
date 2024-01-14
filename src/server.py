@@ -100,7 +100,7 @@ def fox_hare_portrayal(agent):
         
     return portrayal
 
-canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 40, 40, 500, 500)
+canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 40, 40, 520, 520)
 
 model_params = {
     "title": mesa.visualization.StaticText("Parameters:"),
@@ -122,28 +122,28 @@ model_params = {
     "initial_number_of_foxes_habitats": mesa.visualization.Slider(
             "Initial Number of Foxes Habitats", 3, 1, 300
     ),
-    "initial_food_amount": mesa.visualization.Slider(
+    "food_amount": mesa.visualization.Slider(
         "Initial Food Amount", 25, 1, 300
     ),
-    "initial_food_frequency": mesa.visualization.Slider(
+    "food_frequency": mesa.visualization.Slider(
         "Initial Food Frequency", 10, 1, 300
     ),
-    "initlal_fox_mating_season": mesa.visualization.Slider(
+    "fox_mating_season": mesa.visualization.Slider(
         "Initial Fox Mating Season", 365, 1, 1000
     ),
-    "initial_fox_min_mating_range": mesa.visualization.Slider(
+    "fox_min_mating_range": mesa.visualization.Slider(
         "Initial Fox Min Mating Range", 1, 1, 100
     ),
-    "initial_fox_max_mating_range": mesa.visualization.Slider(
+    "fox_max_mating_range": mesa.visualization.Slider(
         "Initial Fox Max Mating Range", 11, 1, 100
     ),
-    "initial_hare_mating_season": mesa.visualization.Slider(
+    "hare_mating_season": mesa.visualization.Slider(
         "Initial Hare Mating Season", 100, 1, 1000
     ),
-    "initial_hare_min_mating_range": mesa.visualization.Slider(
+    "hare_min_mating_range": mesa.visualization.Slider(
         "Initial Hare Min Mating Range", 3, 1, 100
     ),
-    "initial_hare_max_mating_range": mesa.visualization.Slider(
+    "hare_max_mating_range": mesa.visualization.Slider(
         "Initial Hare Max Mating Range", 5, 1, 100
     ),
     "hare_lifetime": mesa.visualization.Slider(
