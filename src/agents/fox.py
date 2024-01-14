@@ -131,7 +131,7 @@ class Fox(Animal):
         Increases fox life if in the position of the vaccine
         """
         if self.pos == pos:
-            self.lifetime += 20 # change to vaccine effectiveness when static
+            self.lifetime += Vaccine.effectiveness # change to vaccine effectiveness when static
             return True
         return False
 

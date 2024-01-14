@@ -27,8 +27,8 @@ class FoxHabitat(mesa.Agent):
     @staticmethod
     def create(model: mesa.Model, create: bool = True) -> 'FoxHabitat':
         habitat = FoxHabitat(model, **model.fox_habitat_params)
-        print(habitat.mating_season)
-        print(habitat.mating_range)
+        # print(habitat.mating_season)
+        # print(habitat.mating_range)
         possible_positions = np.where(model.map == 1)
         random_index = np.random.choice(len(possible_positions[0]), 1, replace=False)
         x = int(possible_positions[0][random_index])
