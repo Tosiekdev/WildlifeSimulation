@@ -146,7 +146,7 @@ class SimulationModel(mesa.Model):
                 "Fox": lambda m: len(list(filter(lambda a: type(a) is Fox, m.scheduler.agents))),
                 "Grass": lambda m: len(list(filter(lambda a: type(a) is HareFood, m.scheduler.agents))),
                 "FoxHabitat": lambda m: len(list(filter(lambda a: type(a) is FoxHabitat, m.scheduler.agents))),
-                "HareHabitat": lambda _: self.number_of_hares_habitats,
+                "HareHabitat": lambda m: len(list(filter(lambda a: type(a) is HareHabitat, m.scheduler.agents))),
                 "Vaccine": lambda m: len(list(filter(lambda a: type(a) is Vaccine, m.scheduler.agents)))
             }
         )
@@ -165,7 +165,7 @@ class SimulationModel(mesa.Model):
                     params = self.fox_habitat_params if agent_class == FoxHabitat else self.hare_habitar_params
                     agent = agent_class(self,**params)
                 else:
-                    agent = agent_class(self)
+                    agent = agent_class(self, self.hare_food_factory_params["food_lifetime"])
                 self.scheduler.add(agent)
                 self.grid.place_agent(agent, (x, self.height - 1 - y))
                 if agent_class == HareHabitat or agent_class == FoxHabitat:

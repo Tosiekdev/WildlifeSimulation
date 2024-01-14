@@ -58,7 +58,7 @@ def add_food_to_map(map, number_of_plants, number_of_hare_habitats, number_of_fo
         for i in range(len(fox_habitat_positions[0])):
             for j in range(i + 1, len(fox_habitat_positions[0])):
                 if np.sqrt((fox_habitat_positions[0][i] - fox_habitat_positions[0][j]) ** 2 +
-                           (fox_habitat_positions[1][i] - fox_habitat_positions[1][j]) ** 2) <= 10:
+                           (fox_habitat_positions[1][i] - fox_habitat_positions[1][j]) ** 2) <= 5:
                     are_fox_habitats_close = True
                     break
         if are_fox_habitats_close:
@@ -71,7 +71,7 @@ def add_food_to_map(map, number_of_plants, number_of_hare_habitats, number_of_fo
         for i in range(len(hare_habitat_positions[0])):
             for j in range(i + 1, len(hare_habitat_positions[0])):
                 if np.sqrt((hare_habitat_positions[0][i] - hare_habitat_positions[0][j]) ** 2 +
-                           (hare_habitat_positions[1][i] - hare_habitat_positions[1][j]) ** 2) <= 10:
+                           (hare_habitat_positions[1][i] - hare_habitat_positions[1][j]) ** 2) <= 5:
                     are_hares_habitats_close = True
                     break
         if are_hares_habitats_close:
@@ -79,8 +79,8 @@ def add_food_to_map(map, number_of_plants, number_of_hare_habitats, number_of_fo
     
 
 
-    updated_map[meadow_indexes[0][hare_habitat_indexes], meadow_indexes[1][hare_habitat_indexes]] = 3
     updated_map[meadow_indexes[0][plant_indexes], meadow_indexes[1][plant_indexes]] = 2
+    updated_map[meadow_indexes[0][hare_habitat_indexes], meadow_indexes[1][hare_habitat_indexes]] = 3
     updated_map[forest_indexes[0][fox_habitat_indexes], forest_indexes[1][fox_habitat_indexes]] = 4
 
     return updated_map
