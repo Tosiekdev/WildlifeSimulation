@@ -28,19 +28,15 @@ def create_map(model_height: int, model_width: int) -> np.ndarray:
     return map
 
 
-def add_food_to_map(
-    map: np.ndarray, number_of_plants: int, number_of_fox_habitats: int, number_of_hare_habitats: int
-) -> np.ndarray:
+def add_food_to_map(map, number_of_plants, number_of_hare_habitats, number_of_fox_habitats):
     """
-    Add plants ( food for hares ), fox spawn points and hare spawn points to the map.
-    It changes some 0 in array to 3 to create hare habitat, 0 to 2 to create plant
-    and 1 to 4 to create fox habitat.
+    Places plants, hare habitats and fox habitats on the map.
 
     Args:
-        map (np.ndarray): Array of binary values.
-        number_of_plants (int): Number of plant.
-        number_of_fox_habitats (int): number of fox habitats.
-        number_of_hare_habitats (int): Number of hare habitats.
+        map (np.ndarray): Map to place habitats on.
+        number_of_plants (int): Number of plants to place.
+        number_of_hare_habitats (int): Number of hare habitats to place.
+        number_of_fox_habitats (int): Number of fox habitats to place.
 
     Returns:
         np.ndarray: Updated array with 0,1,2,3,4 values only.
@@ -50,33 +46,36 @@ def add_food_to_map(
     forest_indexes = np.where(updated_map == 1)
     meadow_size = meadow_indexes[0].size
     forest_size = forest_indexes[0].size
-    
+
     plant_indexes = np.random.choice(meadow_size, size=number_of_plants, replace=False)
     hare_habitat_indexes = np.random.choice(meadow_size, size=number_of_hare_habitats, replace=False)
     fox_habitat_indexes = np.random.choice(forest_size, size=number_of_fox_habitats, replace=False)
+
     are_fox_habitats_close = True
     while are_fox_habitats_close:
         are_fox_habitats_close = False
-        for i in fox_habitat_indexes:
-            for j in fox_habitat_indexes[1:]:
-                if np.abs(i-j) <= 50:
+        fox_habitat_positions = forest_indexes[0][fox_habitat_indexes], forest_indexes[1][fox_habitat_indexes]
+        for i in range(len(fox_habitat_positions[0])):
+            for j in range(i + 1, len(fox_habitat_positions[0])):
+                if np.sqrt((fox_habitat_positions[0][i] - fox_habitat_positions[0][j]) ** 2 +
+                           (fox_habitat_positions[1][i] - fox_habitat_positions[1][j]) ** 2) <= 10:
                     are_fox_habitats_close = True
                     break
         if are_fox_habitats_close:
             fox_habitat_indexes = np.random.choice(forest_size, size=number_of_fox_habitats, replace=False)
-            break
-    
+
     are_hares_habitats_close = True
-    while not are_hares_habitats_close:
+    while are_hares_habitats_close:
         are_hares_habitats_close = False
-        for i in hare_habitat_indexes:
-            for j in hare_habitat_indexes[1:]:
-                if np.abs(i-j) <= 50:
+        hare_habitat_positions = meadow_indexes[0][hare_habitat_indexes], meadow_indexes[1][hare_habitat_indexes]
+        for i in range(len(hare_habitat_positions[0])):
+            for j in range(i + 1, len(hare_habitat_positions[0])):
+                if np.sqrt((hare_habitat_positions[0][i] - hare_habitat_positions[0][j]) ** 2 +
+                           (hare_habitat_positions[1][i] - hare_habitat_positions[1][j]) ** 2) <= 10:
                     are_hares_habitats_close = True
                     break
         if are_hares_habitats_close:
-            hare_habitat_indexes = np.random.choice(forest_size, size=number_of_hare_habitats, replace=False)
-            break
+            hare_habitat_indexes = np.random.choice(meadow_size, size=number_of_hare_habitats, replace=False)
     
 
 

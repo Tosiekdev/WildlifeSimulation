@@ -100,7 +100,7 @@ def fox_hare_portrayal(agent):
         
     return portrayal
 
-canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 40, 40, 520, 520)
+canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 400, 400, 800, 800)
 
 model_params = {
     "title": mesa.visualization.StaticText("Parameters:"),
