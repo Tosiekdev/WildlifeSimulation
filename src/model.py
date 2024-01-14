@@ -134,7 +134,15 @@ class SimulationModel(mesa.Model):
             "vaccine_lifetime": vaccine_lifetime,
         }
 
+    
         self.scheduler = mesa.time.BaseScheduler(self)
+        self.datacollector = mesa.datacollection.DataCollector(
+            model_reporters={
+                "agent_count": lambda m: m.scheduler.get_agent_count(),
+                "Hare": lambda m: len(list(filter(lambda a: type(a) is Hare, m.scheduler.agents))),
+                "Fox": lambda m: len(list(filter(lambda a: type(a) is Fox, m.scheduler.agents))),
+            }
+        )
 
         map = create_map(self.height, self.width)
         self.map = add_food_to_map(
@@ -161,6 +169,8 @@ class SimulationModel(mesa.Model):
         self.running = True
 
     def step(self):
+        self.datacollector.collect(self)
+        self.datacollector.get_model_vars_dataframe().to_csv("data.csv")
         self.scheduler.step()
 
     def run_model(self):
