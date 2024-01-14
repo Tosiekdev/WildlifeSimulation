@@ -10,6 +10,7 @@ from .animal import Animal, ViewDirection
 from .sound import Sound, Direction
 from .pheromone import Pheromone
 from .fox_habitat import FoxHabitat
+from .vaccine_factory import Vaccine
 
 
 class State(Enum):
@@ -88,7 +89,7 @@ class Fox(Animal):
         """
         Moves fox in specified direction.
         """
-        speed = self.speed
+        destination = direction
         match self.state:
             case State.SPRINTING:
                 speed = self.sprint_speed
@@ -125,14 +126,23 @@ class Fox(Animal):
         self.view_direction = ViewDirection.get((dir_x, dir_y))
         self.kill()
 
+    def take_vaccine(self, pos: Tuple[int, int]) -> bool:
+        """
+        Increases fox life if in the position of the vaccine
+        """
+        if self.pos == pos:
+            self.lifetime += 20 # change to vaccine effectiveness when static
+            return True
+        return False
+
     def return_to_home(self):
         """
         Fox moves in destination of his home and does not hunt.
         """
         self.go_in_direction(self.home.pos)
         if self.pos == self.home.pos:
-            # self.home.storage += self.leftovers
-            # self.leftovers = 0
+            self.home.storage += self.leftovers
+            self.leftovers = 0
             self.hunting = True
 
     def get_hares_in_attack_range(self) -> List[Animal]:
@@ -158,6 +168,19 @@ class Fox(Animal):
         hares = [neighbor for neighbor in neighbors if type(neighbor) is hare.Hare and neighbor not in hares_in_attack_range]
 
         return hares
+
+    def get_vaccine(self) -> Vaccine | None:
+        """
+        Returns vaccine closest to fox.
+        """
+        neighbors = self.get_neighbors_within_angle()
+        vaccines = [neighbor for neighbor in neighbors if type(neighbor) is Vaccine]
+
+        vaccine = None
+        if vaccines:
+            vaccine = min(vaccines, key=lambda x: np.linalg.norm(np.array(x.pos) - np.array(self.pos), ord=1))
+
+        return vaccine
 
     def attack(self) -> None:
         """
@@ -193,6 +216,14 @@ class Fox(Animal):
 
             self.focused_hare = None
         else:
+            vaccine = self.get_vaccine()
+            if vaccine:
+                print("I'm going for vaccine")
+                self.go_in_direction(vaccine.pos)
+                if self.take_vaccine(vaccine.pos):
+                    print("Vaccine taken")
+                    # remove vaccine
+                return
             hares_to_attack = self.get_hares_in_attack_range()
             hares_to_sneak = self.get_hares_in_sneaking_range()
             if hares_to_attack:
@@ -241,7 +272,7 @@ class Fox(Animal):
                 return True
         return False
 
-    def adult_step(self):
+    def adult_step(self) -> None:
         """
         Step done by the adult fox.
         """
@@ -252,11 +283,19 @@ class Fox(Animal):
 
         self.make_noise()
 
-    def baby_step(self):
+    def baby_step(self) -> None:
         """
         Step done by not adult fox.
         """
-        # eat some from home
+        if self.eaten < self.consumption:
+            to_eat = self.consumption - self.eaten
+            if to_eat < self.home.storage:
+                self.home.storage -= to_eat
+                self.consumption += to_eat
+            else:
+                self.consumption += self.home.storage
+                self.home.storage = 0
+
         return
 
     def grow(self) -> None:
