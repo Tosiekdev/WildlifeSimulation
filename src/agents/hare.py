@@ -149,7 +149,8 @@ class Hare(Animal):
             food.eat_food()
             self.eaten += 1
         else:
-            print('no food')
+            # print('no food')
+            pass
 
     def check_consumption(self) -> None:
         """
@@ -231,4 +232,4 @@ class Hare(Animal):
                     self.move(self.random_movement())
 
             self.leave_trace()
-            print(self)
+            # print(self)

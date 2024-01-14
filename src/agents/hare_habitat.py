@@ -23,8 +23,8 @@ class HareHabitat(mesa.Agent):
         Function called manually after the agent is created.
         
         """
-        for _ in range(self.model.num_of_hares):
-            Hare.create(self.model, self.pos)
+        # for _ in range(self.model.num_of_hares):
+        Hare.create(self.model, self.pos)
     
     def step(self) -> None:
         """

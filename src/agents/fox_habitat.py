@@ -21,9 +21,9 @@ class FoxHabitat(mesa.Agent):
         Function called manually after the agent is created.
         """
         fox = import_module("src.agents.fox")
-        for _ in range(self.model.num_of_foxes):
-            fox.Fox.create(self.model, self, True)
-    
+        # for _ in range(self.model.num_of_foxes):
+        fox.Fox.create(self.model, self, True)
+
     @staticmethod
     def create(model: mesa.Model, create: bool = True) -> 'FoxHabitat':
         habitat = FoxHabitat(model, **model.fox_habitat_params)

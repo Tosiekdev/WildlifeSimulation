@@ -126,12 +126,12 @@ class Fox(Animal):
             self.view_direction = ViewDirection.get((dir_x, dir_y))
         self.kill()
 
-    def take_vaccine(self, pos: Tuple[int, int]) -> bool:
+    def take_vaccine(self, vaccine: Vaccine) -> bool:
         """
         Increases fox life if in the position of the vaccine
         """
-        if self.pos == pos:
-            self.lifetime += Vaccine.effectiveness # change to vaccine effectiveness when static
+        if self.pos == vaccine.pos:
+            self.lifetime += vaccine.effectivness # change to vaccine effectiveness when static
             return True
         return False
 
@@ -220,7 +220,7 @@ class Fox(Animal):
             if vaccine:
                 # print("I'm going for vaccine")
                 self.go_in_direction(vaccine.pos)
-                if self.take_vaccine(vaccine.pos):
+                if self.take_vaccine(vaccine):
                     # print("Vaccine taken")
                     vaccine.remove()
                 return

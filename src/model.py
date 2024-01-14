@@ -2,7 +2,7 @@ from typing import Any, Tuple
 import mesa
 import numpy as np
 
-from .agents.vaccine_factory import VaccineFactory
+from .agents.vaccine_factory import Vaccine, VaccineFactory
 from .agents import *
 from .environment.map import create_map, add_food_to_map
 from .environment.map import create_map, add_food_to_map
@@ -63,17 +63,20 @@ class SimulationModel(mesa.Model):
         vaccine_frequency: int,
         vaccine_lifetime: int,
         vaccine_effectiveness: int,
+        iterations: int = 100,
         *args: Any,
         **kwargs: Any
     ):
         super().__init__(*args, **kwargs)
 
-        self.width = 40
-        self.height = 40
+        # self.width = 40
+        # self.height = 40
+        self.width = 370
+        self.height = 370
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, False)
 
-        self.iterations = 100
+        self.iterations = iterations
         self.one_week = one_week
 
         self.num_of_hares = initial_hare
@@ -141,12 +144,16 @@ class SimulationModel(mesa.Model):
                 "agent_count": lambda m: m.scheduler.get_agent_count(),
                 "Hare": lambda m: len(list(filter(lambda a: type(a) is Hare, m.scheduler.agents))),
                 "Fox": lambda m: len(list(filter(lambda a: type(a) is Fox, m.scheduler.agents))),
+                "Grass": lambda m: len(list(filter(lambda a: type(a) is HareFood, m.scheduler.agents))),
+                "FoxHabitat": lambda m: len(list(filter(lambda a: type(a) is FoxHabitat, m.scheduler.agents))),
+                "HareHabitat": lambda _: self.number_of_hares_habitats,
+                "Vaccine": lambda m: len(list(filter(lambda a: type(a) is Vaccine, m.scheduler.agents)))
             }
         )
 
         map = create_map(self.height, self.width)
         self.map = add_food_to_map(
-            map, self.number_of_plant, self.number_of_foxes_habitats, self.number_of_hares_habitats
+            map, self.number_of_plant, self.number_of_hares_habitats, self.number_of_foxes_habitats
         )
 
         agent_mapping = {2: HareFood, 3: HareHabitat, 4: FoxHabitat}
