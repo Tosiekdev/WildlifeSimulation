@@ -122,7 +122,8 @@ class Fox(Animal):
             dx = 0
 
         self.model.grid.move_agent(self, (self.pos[0] + dx, self.pos[1] + dy))
-        self.view_direction = ViewDirection.get((dir_x, dir_y))
+        if dir_x != 0 or dir_y != 0:
+            self.view_direction = ViewDirection.get((dir_x, dir_y))
         self.kill()
 
     def take_vaccine(self, pos: Tuple[int, int]) -> bool:
@@ -217,10 +218,10 @@ class Fox(Animal):
         else:
             vaccine = self.get_vaccine()
             if vaccine:
-                print("I'm going for vaccine")
+                # print("I'm going for vaccine")
                 self.go_in_direction(vaccine.pos)
                 if self.take_vaccine(vaccine.pos):
-                    print("Vaccine taken")
+                    # print("Vaccine taken")
                     vaccine.remove()
                 return
             hares_to_attack = self.get_hares_in_attack_range()
@@ -328,4 +329,4 @@ class Fox(Animal):
         else:
             self.baby_step()
 
-        print(self)
+        # print(self)
