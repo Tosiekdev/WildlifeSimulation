@@ -58,7 +58,7 @@ def add_food_to_map(map, number_of_plants, number_of_hare_habitats, number_of_fo
         for i in range(len(fox_habitat_positions[0])):
             for j in range(i + 1, len(fox_habitat_positions[0])):
                 if np.sqrt((fox_habitat_positions[0][i] - fox_habitat_positions[0][j]) ** 2 +
-                           (fox_habitat_positions[1][i] - fox_habitat_positions[1][j]) ** 2) <= 5:
+                           (fox_habitat_positions[1][i] - fox_habitat_positions[1][j]) ** 2) <= 20:
                     are_fox_habitats_close = True
                     break
         if are_fox_habitats_close:

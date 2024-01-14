@@ -18,7 +18,7 @@ class HareFood(mesa.Agent):
         Performs a single of agent.
 
         """
-        if self.lifetime <= 0:
+        if self.lifetime <= 0 or self.eaten:
             self.model.grid.remove_agent(self)
             self.model.scheduler.remove(self)
         else:

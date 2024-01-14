@@ -50,6 +50,9 @@ class Fox(Animal):
         self.starting_age = self.lifetime
         self.leftovers = 0
 
+        if not self.adult:
+            self.consumption /= 1.5
+
     @staticmethod
     def create(model: mesa.Model, home: FoxHabitat, adult: bool):
         fox = Fox(model, home, adult, **model.fox_params)
@@ -79,7 +82,7 @@ class Fox(Animal):
             self.focused_hare.remove()
             self.focused_hare.is_alive = False
             self.focused_hare = None
-            self.eaten += 4
+            self.eaten += 6
             if self.eaten > self.consumption:
                 self.leftovers += self.eaten - self.consumption
                 self.eaten = self.consumption
@@ -142,6 +145,7 @@ class Fox(Animal):
         self.go_in_direction(self.home.pos)
         if self.pos == self.home.pos:
             self.home.storage += self.leftovers
+            print(self.home.storage)
             self.leftovers = 0
             self.hunting = True
 
@@ -267,9 +271,9 @@ class Fox(Animal):
         Checks if fox has eaten enough in passing week.
         """
         if self.model.scheduler.steps > 0 and self.model.scheduler.steps % self.model.one_week == 0:
-            self.eaten = 0
             if self.eaten < self.consumption:
                 return True
+            self.eaten = 0
         return False
 
     def adult_step(self) -> None:
@@ -291,9 +295,9 @@ class Fox(Animal):
             to_eat = self.consumption - self.eaten
             if to_eat < self.home.storage:
                 self.home.storage -= to_eat
-                self.consumption += to_eat
+                self.eaten += to_eat
             else:
-                self.consumption += self.home.storage
+                self.eaten += self.home.storage
                 self.home.storage = 0
 
         return
@@ -304,9 +308,10 @@ class Fox(Animal):
         """
         self.lifetime -= 1
         if not self.adult:
-            if self.starting_age - self.lifetime == 52 * self.model.one_week:
+            if self.starting_age - self.lifetime == 10 * self.model.one_week:
                 self.adult = True
                 self.hunting = True
+                self.consumption *= 1.5
                 self.home = FoxHabitat.create(self.model, False)
 
     def should_die(self) -> bool:
