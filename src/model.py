@@ -68,8 +68,8 @@ class SimulationModel(mesa.Model):
     ):
         super().__init__(*args, **kwargs)
 
-        self.width = 400
-        self.height = 400
+        self.width = 40
+        self.height = 40
 
         self.grid = mesa.space.MultiGrid(self.width, self.height, False)
 

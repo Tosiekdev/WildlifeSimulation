@@ -100,7 +100,7 @@ def fox_hare_portrayal(agent):
         
     return portrayal
 
-canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 400, 400, 800, 800)
+canvas_element = mesa.visualization.CanvasGrid(fox_hare_portrayal, 40, 40, 520, 520)
 
 model_params = {
     "title": mesa.visualization.StaticText("Parameters:"),
@@ -216,7 +216,7 @@ model_params = {
         "Fox Smelling Range", 10, 1, 100
     ),
     "fox_attack_range": mesa.visualization.Slider(
-        "Fox View Range", 3, 1, 100
+        "Fox Attack Range", 3, 1, 100
     ),
     "fox_sprint_speed": mesa.visualization.Slider(
         "Fox Sprint Speed", 3, 1, 5

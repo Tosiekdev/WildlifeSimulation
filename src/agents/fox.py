@@ -52,7 +52,7 @@ class Fox(Animal):
 
     @staticmethod
     def create(model: mesa.Model, home: FoxHabitat, adult: bool):
-        fox = Fox(model, home, adult)
+        fox = Fox(model, home, adult, **model.fox_params)
         model.grid.place_agent(fox, home.pos)
         model.scheduler.add(fox)
 
@@ -89,7 +89,6 @@ class Fox(Animal):
         """
         Moves fox in specified direction.
         """
-        destination = direction
         match self.state:
             case State.SPRINTING:
                 speed = self.sprint_speed
@@ -222,7 +221,7 @@ class Fox(Animal):
                 self.go_in_direction(vaccine.pos)
                 if self.take_vaccine(vaccine.pos):
                     print("Vaccine taken")
-                    # remove vaccine
+                    vaccine.remove()
                 return
             hares_to_attack = self.get_hares_in_attack_range()
             hares_to_sneak = self.get_hares_in_sneaking_range()
@@ -307,7 +306,7 @@ class Fox(Animal):
             if self.starting_age - self.lifetime == 52 * self.model.one_week:
                 self.adult = True
                 self.hunting = True
-                # self.home = FoxHabitat.create()
+                self.home = FoxHabitat.create(self.model, False)
 
     def should_die(self) -> bool:
         self.grow()

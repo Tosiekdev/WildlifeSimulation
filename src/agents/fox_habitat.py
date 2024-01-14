@@ -25,7 +25,7 @@ class FoxHabitat(mesa.Agent):
             fox.Fox.create(self.model, self, True)
     
     @staticmethod
-    def create(model: mesa.Model) -> None:
+    def create(model: mesa.Model, create: bool = True) -> 'FoxHabitat':
         habitat = FoxHabitat(model, **model.fox_habitat_params)
         print(habitat.mating_season)
         print(habitat.mating_range)
@@ -35,7 +35,9 @@ class FoxHabitat(mesa.Agent):
         y = int(possible_positions[1][random_index])
         model.grid.place_agent(habitat, (y, model.height - 1 - x))
         model.scheduler.add(habitat)
-        habitat.create_animals()
+        if create:
+            habitat.create_animals()
+        return habitat
        
             
     def step(self) -> None:
