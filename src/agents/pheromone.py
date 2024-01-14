@@ -40,7 +40,7 @@ class Pheromone(mesa.Agent):
         
     def step(self) -> None:
         self.update_value()
-        print(self)
+        # print(self)
 
         if self.value < 0.1:
             self.model.grid.remove_agent(self)

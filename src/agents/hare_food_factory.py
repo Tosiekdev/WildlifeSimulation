@@ -4,7 +4,7 @@ from .hare_food import HareFood
 
 
 class HareFoodFactory(mesa.Agent):
-    def __init__(self, model: mesa.Model, food_amount: int = 25, frequency: int = 10):
+    def __init__(self, model: mesa.Model, food_amount: int = 25, frequency: int = 10, food_lifetime: int = 350):
         """
         Class responsible for creating food for Hares.
 
@@ -17,6 +17,7 @@ class HareFoodFactory(mesa.Agent):
         self.iteration = 0
         self.frquency = frequency
         self.model.scheduler.add(self)
+        self.food_lifetime = food_lifetime
 
     def step(self) -> None:
         """
@@ -32,4 +33,4 @@ class HareFoodFactory(mesa.Agent):
                 random_index = np.random.choice(len(possible_positions[0]), 1, replace=False)
                 x = int(possible_positions[0][random_index])
                 y = int(possible_positions[1][random_index])
-                HareFood.create(self.model, (y, self.model.height - 1 - x))
+                HareFood.create(self.model, (y, self.model.height - 1 - x), self.food_lifetime)

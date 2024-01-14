@@ -3,14 +3,14 @@ import mesa
 
 
 class HareFood(mesa.Agent):
-    def __init__(self, model: mesa.Model) -> None:
+    def __init__(self, model: mesa.Model, lifetime:int = 350) -> None:
         """
         Class responsible for feeding Hares.
 
         @param: mmodel - Mesa model .
         """
         super().__init__(model.next_id(), model)
-        self.lifetime: int = 350
+        self.lifetime: int = lifetime
         self.eaten: bool = False
 
     def step(self) -> None:
@@ -18,7 +18,7 @@ class HareFood(mesa.Agent):
         Performs a single of agent.
 
         """
-        if self.lifetime <= 0:
+        if self.lifetime <= 0 or self.eaten:
             self.model.grid.remove_agent(self)
             self.model.scheduler.remove(self)
         else:
@@ -32,7 +32,7 @@ class HareFood(mesa.Agent):
         self.eaten = True
 
     @staticmethod
-    def create(model: mesa.Model, pos: Tuple[int, int]) -> None:
+    def create(model: mesa.Model, pos: Tuple[int, int], food_lifetime: int) -> None:
         """
         Creates hare food.
 
@@ -40,6 +40,6 @@ class HareFood(mesa.Agent):
         @param: pos - position of hare food.
 
         """
-        hare_food = HareFood(model)
+        hare_food = HareFood(model, food_lifetime)
         model.grid.place_agent(hare_food, pos)
         model.scheduler.add(hare_food)
